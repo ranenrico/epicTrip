@@ -1,0 +1,2023 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
+-- Dumped by pg_dump version 16.2
+
+-- Started on 2024-06-11 11:11:57 UTC
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 215 (class 1259 OID 37317)
+-- Name: app_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.app_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.app_user_id_seq OWNER TO "postgresMaster";
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 216 (class 1259 OID 37318)
+-- Name: app_user; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.app_user (
+    id bigint DEFAULT nextval('public.app_user_id_seq'::regclass) NOT NULL,
+    firstname character varying(32) NOT NULL,
+    lastname character varying(32) NOT NULL,
+    birthdate date NOT NULL,
+    telephone_number character varying NOT NULL,
+    country character varying(32) NOT NULL,
+    city character varying(32) NOT NULL,
+    street character varying(128) NOT NULL,
+    house_number integer NOT NULL,
+    postal_code character varying(32) NOT NULL,
+    email character varying(32) NOT NULL,
+    password character varying(64) NOT NULL,
+    gender character varying(16),
+    CONSTRAINT check_emails CHECK ((((email)::text ~~ '%@gmail.com'::text) OR ((email)::text ~~ '%@yahoo.it'::text) OR ((email)::text ~~ '%@outlook.it'::text))),
+    CONSTRAINT check_gender CHECK (((gender)::text = ANY (ARRAY[('Maschio'::character varying)::text, ('Femmina'::character varying)::text, ('Altro'::character varying)::text]))),
+    CONSTRAINT check_if_adult CHECK ((birthdate <= (CURRENT_DATE - '18 years'::interval))),
+    CONSTRAINT check_if_at_least_eight CHECK ((length((password)::text) >= 8)),
+    CONSTRAINT check_if_at_least_eight_numbers CHECK ((length((telephone_number)::text) >= 8))
+);
+
+
+ALTER TABLE public.app_user OWNER TO "postgresMaster";
+
+--
+-- TOC entry 217 (class 1259 OID 37329)
+-- Name: attraction; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.attraction (
+    id bigint NOT NULL,
+    name character varying(32) NOT NULL,
+    description character varying(128) NOT NULL,
+    city character varying(32) NOT NULL,
+    street character varying(32) NOT NULL,
+    latitude double precision NOT NULL,
+    longitude double precision NOT NULL
+);
+
+
+ALTER TABLE public.attraction OWNER TO "postgresMaster";
+
+--
+-- TOC entry 218 (class 1259 OID 37332)
+-- Name: attraction_visit; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.attraction_visit (
+    id bigint NOT NULL,
+    attraction_id bigint NOT NULL,
+    package_id bigint NOT NULL,
+    attraction_order integer NOT NULL,
+    start_time time without time zone NOT NULL,
+    end_time time without time zone NOT NULL,
+    visit_day integer
+);
+
+
+ALTER TABLE public.attraction_visit OWNER TO "postgresMaster";
+
+--
+-- TOC entry 219 (class 1259 OID 37335)
+-- Name: attraction_visit_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.attraction_visit_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.attraction_visit_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 3577 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: attraction_visit_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgresMaster
+--
+
+ALTER SEQUENCE public.attraction_visit_id_seq OWNED BY public.attraction_visit.id;
+
+
+--
+-- TOC entry 220 (class 1259 OID 37336)
+-- Name: attractions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.attractions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.attractions_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 3578 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: attractions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgresMaster
+--
+
+ALTER SEQUENCE public.attractions_id_seq OWNED BY public.attraction.id;
+
+
+--
+-- TOC entry 221 (class 1259 OID 37337)
+-- Name: comment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.comment_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.comment_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 222 (class 1259 OID 37338)
+-- Name: faq_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.faq_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.faq_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 223 (class 1259 OID 37339)
+-- Name: faq; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.faq (
+    id bigint DEFAULT nextval('public.faq_id_seq'::regclass) NOT NULL,
+    question character varying(256) NOT NULL,
+    answer character varying(512)
+);
+
+
+ALTER TABLE public.faq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 224 (class 1259 OID 37345)
+-- Name: guide_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.guide_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.guide_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 225 (class 1259 OID 37346)
+-- Name: guide; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.guide (
+    id bigint DEFAULT nextval('public.guide_id_seq'::regclass) NOT NULL,
+    firstname character varying(32) NOT NULL,
+    lastname character varying(32) NOT NULL,
+    birthdate date NOT NULL,
+    telephone_number character varying(16) NOT NULL,
+    country character varying(16) NOT NULL,
+    city character varying(16) NOT NULL,
+    street character varying(32) NOT NULL,
+    house_number integer NOT NULL,
+    postal_code character varying(16) NOT NULL,
+    email character varying(32) NOT NULL,
+    gender character varying,
+    introduction character varying(1024) NOT NULL,
+    workplace character varying(32) NOT NULL,
+    CONSTRAINT check_gender CHECK (((gender)::text = ANY (ARRAY[('Maschio'::character varying)::text, ('Femmina'::character varying)::text, ('Altro'::character varying)::text])))
+);
+
+
+ALTER TABLE public.guide OWNER TO "postgresMaster";
+
+--
+-- TOC entry 226 (class 1259 OID 37353)
+-- Name: guide_reservation; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.guide_reservation (
+    id bigint NOT NULL,
+    guide_id bigint NOT NULL,
+    package_id bigint NOT NULL,
+    reservation_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    start_performance_date date NOT NULL,
+    end_performance_date date NOT NULL
+);
+
+
+ALTER TABLE public.guide_reservation OWNER TO "postgresMaster";
+
+--
+-- TOC entry 227 (class 1259 OID 37357)
+-- Name: guide_reservation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.guide_reservation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.guide_reservation_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 3579 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: guide_reservation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgresMaster
+--
+
+ALTER SEQUENCE public.guide_reservation_id_seq OWNED BY public.guide_reservation.id;
+
+
+--
+-- TOC entry 228 (class 1259 OID 37358)
+-- Name: hotel_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.hotel_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.hotel_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 229 (class 1259 OID 37359)
+-- Name: hotel; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.hotel (
+    id bigint DEFAULT nextval('public.hotel_id_seq'::regclass) NOT NULL,
+    name character varying(32) NOT NULL,
+    country character varying(16) NOT NULL,
+    city character varying(16) NOT NULL,
+    street character varying(64) NOT NULL,
+    house_number integer NOT NULL,
+    postal_code character varying(16) NOT NULL,
+    telephone_number character varying(32) NOT NULL,
+    email character varying(32),
+    tripadvisor_rating double precision NOT NULL,
+    price_range character varying(8) NOT NULL,
+    latitude double precision NOT NULL,
+    longitude double precision NOT NULL,
+    commission numeric DEFAULT 0.05 NOT NULL,
+    CONSTRAINT check_price_range CHECK (((price_range)::text = ANY (ARRAY[('$'::character varying)::text, ('$$'::character varying)::text, ('$$$'::character varying)::text]))),
+    CONSTRAINT check_tripadvisor_rating CHECK ((tripadvisor_rating = ANY (ARRAY[((1)::numeric)::double precision, (1.5)::double precision, ((2)::numeric)::double precision, (2.5)::double precision, ((3)::numeric)::double precision, (3.5)::double precision, ((4)::numeric)::double precision, (4.5)::double precision, ((5)::numeric)::double precision])))
+);
+
+
+ALTER TABLE public.hotel OWNER TO "postgresMaster";
+
+--
+-- TOC entry 230 (class 1259 OID 37368)
+-- Name: hotel_reservation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.hotel_reservation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.hotel_reservation_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 231 (class 1259 OID 37369)
+-- Name: hotel_reservation; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.hotel_reservation (
+    id bigint DEFAULT nextval('public.hotel_reservation_id_seq'::regclass) NOT NULL,
+    hotel_id bigint NOT NULL,
+    reservation_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    check_in timestamp without time zone NOT NULL,
+    check_out timestamp without time zone NOT NULL,
+    package_reservation_id bigint NOT NULL,
+    people_count integer NOT NULL,
+    CONSTRAINT check_in_after_two_pm CHECK (((check_in)::time without time zone > '14:00:00'::time without time zone)),
+    CONSTRAINT check_in_before_check_out CHECK (((check_in)::date < (check_out)::date)),
+    CONSTRAINT check_out_before_ten_am CHECK (((check_out)::time without time zone < '10:00:00'::time without time zone))
+);
+
+
+ALTER TABLE public.hotel_reservation OWNER TO "postgresMaster";
+
+--
+-- TOC entry 232 (class 1259 OID 37377)
+-- Name: nearby_restaurant; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.nearby_restaurant (
+    id bigint NOT NULL,
+    restaurant_id bigint NOT NULL,
+    attraction_id bigint NOT NULL,
+    distance double precision NOT NULL
+);
+
+
+ALTER TABLE public.nearby_restaurant OWNER TO "postgresMaster";
+
+--
+-- TOC entry 233 (class 1259 OID 37380)
+-- Name: package; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.package (
+    id bigint NOT NULL,
+    package_duration integer NOT NULL,
+    type character varying(16) NOT NULL,
+    country character varying(32) NOT NULL,
+    city character varying(32) NOT NULL,
+    price_range character varying(8) NOT NULL,
+    title character varying(64) NOT NULL,
+    description character varying(256),
+    max_people_count integer DEFAULT 10 NOT NULL,
+    active boolean DEFAULT false NOT NULL,
+    image_path character varying(64),
+    CONSTRAINT check_package_duration CHECK ((package_duration = ANY (ARRAY[3, 5]))),
+    CONSTRAINT check_package_type CHECK (((type)::text = ANY (ARRAY[('adventure'::character varying)::text, ('city_tour'::character varying)::text, ('relax'::character varying)::text, ('mix'::character varying)::text]))),
+    CONSTRAINT check_price_range CHECK (((price_range)::text = ANY (ARRAY[('$'::character varying)::text, ('$$'::character varying)::text, ('$$$'::character varying)::text])))
+);
+
+
+ALTER TABLE public.package OWNER TO "postgresMaster";
+
+--
+-- TOC entry 234 (class 1259 OID 37388)
+-- Name: package_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.package_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.package_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 3580 (class 0 OID 0)
+-- Dependencies: 234
+-- Name: package_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgresMaster
+--
+
+ALTER SEQUENCE public.package_id_seq OWNED BY public.package.id;
+
+
+--
+-- TOC entry 235 (class 1259 OID 37389)
+-- Name: package_reservation; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.package_reservation (
+    id bigint NOT NULL,
+    package_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    people_count integer NOT NULL,
+    cost numeric NOT NULL,
+    creation_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    start_date date NOT NULL
+);
+
+
+ALTER TABLE public.package_reservation OWNER TO "postgresMaster";
+
+--
+-- TOC entry 236 (class 1259 OID 37395)
+-- Name: package_reservation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.package_reservation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.package_reservation_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 3581 (class 0 OID 0)
+-- Dependencies: 236
+-- Name: package_reservation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgresMaster
+--
+
+ALTER SEQUENCE public.package_reservation_id_seq OWNED BY public.package_reservation.id;
+
+
+--
+-- TOC entry 237 (class 1259 OID 37396)
+-- Name: reaction_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.reaction_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.reaction_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 238 (class 1259 OID 37397)
+-- Name: reaction; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.reaction (
+    id bigint DEFAULT nextval('public.reaction_id_seq'::regclass) NOT NULL,
+    user_id bigint NOT NULL,
+    review_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.reaction OWNER TO "postgresMaster";
+
+--
+-- TOC entry 239 (class 1259 OID 37401)
+-- Name: restaurant_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.restaurant_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.restaurant_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 240 (class 1259 OID 37402)
+-- Name: restaurant; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.restaurant (
+    id bigint DEFAULT nextval('public.restaurant_id_seq'::regclass) NOT NULL,
+    name character varying(64) NOT NULL,
+    country character varying(16) NOT NULL,
+    city character varying(16) NOT NULL,
+    street character varying(64) NOT NULL,
+    house_number integer NOT NULL,
+    postal_code character varying(16) NOT NULL,
+    telephone_number character varying(32) NOT NULL,
+    email character varying(64),
+    price_range character varying(8) NOT NULL,
+    tripadvisor_rating double precision NOT NULL,
+    latitude double precision NOT NULL,
+    longitude double precision NOT NULL,
+    CONSTRAINT check_price_range CHECK (((price_range)::text = ANY (ARRAY[('$'::character varying)::text, ('$$'::character varying)::text, ('$$$'::character varying)::text]))),
+    CONSTRAINT check_tripadvisor_rating CHECK ((tripadvisor_rating = ANY (ARRAY[((1)::numeric)::double precision, (1.5)::double precision, ((2)::numeric)::double precision, (2.5)::double precision, ((3)::numeric)::double precision, (3.5)::double precision, ((4)::numeric)::double precision, (4.5)::double precision, ((5)::numeric)::double precision])))
+);
+
+
+ALTER TABLE public.restaurant OWNER TO "postgresMaster";
+
+--
+-- TOC entry 241 (class 1259 OID 37408)
+-- Name: restaurant_near_attractions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.restaurant_near_attractions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.restaurant_near_attractions_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 3582 (class 0 OID 0)
+-- Dependencies: 241
+-- Name: restaurant_near_attractions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgresMaster
+--
+
+ALTER SEQUENCE public.restaurant_near_attractions_id_seq OWNED BY public.nearby_restaurant.id;
+
+
+--
+-- TOC entry 242 (class 1259 OID 37409)
+-- Name: restaurant_reservation; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.restaurant_reservation (
+    id bigint NOT NULL,
+    restaurant_id bigint NOT NULL,
+    reservation_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    check_in timestamp without time zone NOT NULL,
+    people_count integer NOT NULL,
+    package_reservation_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.restaurant_reservation OWNER TO "postgresMaster";
+
+--
+-- TOC entry 243 (class 1259 OID 37413)
+-- Name: restaurant_reservation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.restaurant_reservation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.restaurant_reservation_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 3583 (class 0 OID 0)
+-- Dependencies: 243
+-- Name: restaurant_reservation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgresMaster
+--
+
+ALTER SEQUENCE public.restaurant_reservation_id_seq OWNED BY public.restaurant_reservation.id;
+
+
+--
+-- TOC entry 244 (class 1259 OID 37414)
+-- Name: review_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.review_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.review_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 245 (class 1259 OID 37415)
+-- Name: review; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.review (
+    id bigint DEFAULT nextval('public.review_id_seq'::regclass) NOT NULL,
+    user_id bigint NOT NULL,
+    description character varying(256),
+    rating integer NOT NULL,
+    CONSTRAINT check_rating CHECK ((rating = ANY (ARRAY[1, 2, 3, 4, 5])))
+);
+
+
+ALTER TABLE public.review OWNER TO "postgresMaster";
+
+--
+-- TOC entry 246 (class 1259 OID 37420)
+-- Name: survey; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.survey (
+    id bigint NOT NULL,
+    question character varying(256) NOT NULL
+);
+
+
+ALTER TABLE public.survey OWNER TO "postgresMaster";
+
+--
+-- TOC entry 247 (class 1259 OID 37423)
+-- Name: survey_answer; Type: TABLE; Schema: public; Owner: postgresMaster
+--
+
+CREATE TABLE public.survey_answer (
+    id bigint NOT NULL,
+    answer character varying(256) NOT NULL,
+    answer_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    question_id bigint NOT NULL,
+    user_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.survey_answer OWNER TO "postgresMaster";
+
+--
+-- TOC entry 248 (class 1259 OID 37427)
+-- Name: survey_answer_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.survey_answer_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.survey_answer_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 3584 (class 0 OID 0)
+-- Dependencies: 248
+-- Name: survey_answer_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgresMaster
+--
+
+ALTER SEQUENCE public.survey_answer_id_seq OWNED BY public.survey_answer.id;
+
+
+--
+-- TOC entry 249 (class 1259 OID 37428)
+-- Name: survey_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
+--
+
+CREATE SEQUENCE public.survey_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.survey_id_seq OWNER TO "postgresMaster";
+
+--
+-- TOC entry 3585 (class 0 OID 0)
+-- Dependencies: 249
+-- Name: survey_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgresMaster
+--
+
+ALTER SEQUENCE public.survey_id_seq OWNED BY public.survey.id;
+
+
+--
+-- TOC entry 3285 (class 2604 OID 37429)
+-- Name: attraction id; Type: DEFAULT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.attraction ALTER COLUMN id SET DEFAULT nextval('public.attractions_id_seq'::regclass);
+
+
+--
+-- TOC entry 3286 (class 2604 OID 37430)
+-- Name: attraction_visit id; Type: DEFAULT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.attraction_visit ALTER COLUMN id SET DEFAULT nextval('public.attraction_visit_id_seq'::regclass);
+
+
+--
+-- TOC entry 3289 (class 2604 OID 37431)
+-- Name: guide_reservation id; Type: DEFAULT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.guide_reservation ALTER COLUMN id SET DEFAULT nextval('public.guide_reservation_id_seq'::regclass);
+
+
+--
+-- TOC entry 3295 (class 2604 OID 37432)
+-- Name: nearby_restaurant id; Type: DEFAULT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.nearby_restaurant ALTER COLUMN id SET DEFAULT nextval('public.restaurant_near_attractions_id_seq'::regclass);
+
+
+--
+-- TOC entry 3296 (class 2604 OID 37433)
+-- Name: package id; Type: DEFAULT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.package ALTER COLUMN id SET DEFAULT nextval('public.package_id_seq'::regclass);
+
+
+--
+-- TOC entry 3299 (class 2604 OID 37434)
+-- Name: package_reservation id; Type: DEFAULT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.package_reservation ALTER COLUMN id SET DEFAULT nextval('public.package_reservation_id_seq'::regclass);
+
+
+--
+-- TOC entry 3303 (class 2604 OID 37435)
+-- Name: restaurant_reservation id; Type: DEFAULT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.restaurant_reservation ALTER COLUMN id SET DEFAULT nextval('public.restaurant_reservation_id_seq'::regclass);
+
+
+--
+-- TOC entry 3306 (class 2604 OID 37436)
+-- Name: survey id; Type: DEFAULT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.survey ALTER COLUMN id SET DEFAULT nextval('public.survey_id_seq'::regclass);
+
+
+--
+-- TOC entry 3307 (class 2604 OID 37437)
+-- Name: survey_answer id; Type: DEFAULT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.survey_answer ALTER COLUMN id SET DEFAULT nextval('public.survey_answer_id_seq'::regclass);
+
+
+--
+-- TOC entry 3538 (class 0 OID 37318)
+-- Dependencies: 216
+-- Data for Name: app_user; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+INSERT INTO public.app_user VALUES (1, 'Alessandra', 'Bavastrelli', '1996-10-25', '3494209357', 'Italy', 'Rome', 'Via Ottavio Morisani', 70, '00189', 'alessandra_bavastrelli@yahoo.it', 'alebava1996', 'Femmina');
+INSERT INTO public.app_user VALUES (2, 'Enrico', 'Ranieri', '2000-08-19', '3453162616', 'Italy', 'Gioia Tauro', 'Via Nazionale 111', 225, '89013', 'ran.enrico00@gmail.com', 'ranenri2000', 'Maschio');
+INSERT INTO public.app_user VALUES (3, 'Riccardo', 'Girotto', '2001-05-01', '3663815132', 'Italy', 'Monselice', 'Via Felice Cavallotti', 11, '35043', 'riccardogirotto2001@gmail.com', 'ricca2001', 'Maschio');
+INSERT INTO public.app_user VALUES (4, 'Francesco', 'Aversali', '1995-07-14', '3516533575', 'Italy', 'Monte San Giovanni Campano', 'Via Reditoto', 36, '03025', 'aversali_adtr@gmail.com', 'aversa1995', 'Maschio');
+INSERT INTO public.app_user VALUES (5, 'Lorenzo', 'Tirotta', '2002-03-22', '3791528570', 'Italy', 'Cosenza', 'Via Gerolamo de rada', 1, '87100', 'tirotta40@gmail.com', 'tigrotto4ever', 'Maschio');
+
+
+--
+-- TOC entry 3539 (class 0 OID 37329)
+-- Dependencies: 217
+-- Data for Name: attraction; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+INSERT INTO public.attraction VALUES (1, 'Praça Principe Real', 'Una pittoresca piazza con giardini e caffè', 'Lisbon', 'Praça do Príncipe Real', 38.7162, -9.1485);
+INSERT INTO public.attraction VALUES (2, 'Monastero Sao Vincente de Fora', 'Monastero barocco con splendida vista su Lisbona', 'Lisbon', 'Largo de São Vicente', 38.7144, -9.128);
+INSERT INTO public.attraction VALUES (3, 'Castello Sao Jorge', 'Un antico castello con una vista panoramica su Lisbona.', 'Lisbon', 'R. de Santa Cruz do Castelo', 38.7139, -9.1334);
+INSERT INTO public.attraction VALUES (4, 'Miradouro Santa Luzia', 'Romantica terrazza panoramica sul fiume Tago', 'Lisbon', 'Largo Santa Luzia', 38.7117, -9.1304);
+INSERT INTO public.attraction VALUES (5, 'Monastero dos Jerónimos', 'Un monastero manuelino patrimonio mondiale dell''UNESCO.', 'Lisbon', 'Praça do Império', 38.6972, -9.2067);
+INSERT INTO public.attraction VALUES (6, 'Torre di Belém', 'Una torre del XVI secolo situata sulle rive del fiume Tago.', 'Lisbon', 'Av. Brasília', 38.6917, -9.2158);
+INSERT INTO public.attraction VALUES (7, 'Padrão dos Descobrimentos', 'Monumento ai navigatori portoghesi.', 'Lisbon', 'Av. Brasília', 38.6938, -9.2057);
+INSERT INTO public.attraction VALUES (8, 'MAAT', 'Museo di arte, architettura e tecnologia.', 'Lisbon', 'Av. Brasília', 38.6958, -9.1932);
+INSERT INTO public.attraction VALUES (9, 'Praça do Comércio', 'Una grande piazza sul fiume Tago.', 'Lisbon', 'Praça do Comércio', 38.7073, -9.1363);
+INSERT INTO public.attraction VALUES (10, 'Cattedrale la Se', 'La cattedrale più antica di Lisbona.', 'Lisbon', 'Largo da Sé', 38.7096, -9.1334);
+INSERT INTO public.attraction VALUES (11, 'Convento do Carmo', 'Rovine gotiche di un convento del XIV secolo.', 'Lisbon', 'Largo do Carmo', 38.712, -9.1406);
+INSERT INTO public.attraction VALUES (12, 'Basilica da Estrela', 'Una basilica del XVIII secolo con una grande cupola.', 'Lisbon', 'Praça da Estrela', 38.7135, -9.1604);
+INSERT INTO public.attraction VALUES (13, 'Central Park', 'Un vasto parco urbano nel cuore di Manhattan.', 'New York', 'Central Park East', 40.7824, -73.9656);
+INSERT INTO public.attraction VALUES (14, 'Guggenheim', 'Un famoso museo d''arte moderna.', 'New York', '5th Ave', 40.783, -73.9592);
+INSERT INTO public.attraction VALUES (15, 'Museo Metropolitano d''Arte', 'Uno dei più grandi e prestigiosi musei d''arte del mondo.', 'New York', '5th Ave', 40.7794, -73.9632);
+INSERT INTO public.attraction VALUES (16, 'Times Square', 'Una delle piazze più famose al mondo.', 'New York', 'Times Square', 40.758, -73.9855);
+INSERT INTO public.attraction VALUES (17, 'Bryant Park', 'Un parco pubblico situato nel centro di Manhattan.', 'New York', 'Bryant Park', 40.7536, -73.9833);
+INSERT INTO public.attraction VALUES (18, 'Chrysler Building', 'Un iconico grattacielo art déco.', 'New York', 'Lexington Ave', 40.7516, -73.9755);
+INSERT INTO public.attraction VALUES (19, 'Empire State Building', 'Un iconico grattacielo con una vista panoramica sulla città.', 'New York', '5th Ave', 40.7481, -73.9848);
+INSERT INTO public.attraction VALUES (20, 'High Line', 'Un parco lineare sopraelevato costruito su una vecchia linea ferroviaria.', 'New York', 'W 34th St.', 40.7563, -74.0036);
+INSERT INTO public.attraction VALUES (21, 'Flatiron', 'Un edificio iconico di forma triangolare.', 'New York', '5th Ave', 40.7414, -73.9894);
+INSERT INTO public.attraction VALUES (22, 'Ponte di Brooklyn', 'Un ponte sospeso che collega Manhattan a Brooklyn.', 'New York', 'Financial District', 40.7121, -74.0044);
+INSERT INTO public.attraction VALUES (23, '9/11 Memorial Pools', 'Memoriale commemorativo per le vittime dell''11 settembre.', 'New York', 'Fulton St', 40.7116, -74.0133);
+INSERT INTO public.attraction VALUES (24, 'Statua della Libertà', 'Un simbolo di libertà e democrazia.', 'New York', 'Battery Park Underpass', 40.7009, -74.0151);
+INSERT INTO public.attraction VALUES (25, 'Palazzo di Topkapi', 'Un vasto complesso di edifici storici che fu la residenza dei sultani ottomani.', 'Istanbul', 'Cankurtaran', 41.0112, 28.983);
+INSERT INTO public.attraction VALUES (26, 'Basilica di Santa Sofia', 'Una basilica del VI secolo, successivamente una moschea e ora un museo.', 'Istanbul', 'Sultan Ahmet', 41.0085, 28.98);
+INSERT INTO public.attraction VALUES (27, 'Moschea Blu', 'Una storica moschea del XVII secolo famosa per le sue piastrelle blu.', 'Istanbul', 'Sultan Ahmet', 41.0057, 28.9761);
+INSERT INTO public.attraction VALUES (28, 'Piazza Sultanahmet', 'Una vasta piazza-giardino con alcuni dei più famosi monumenti', 'Istanbul', 'Kariye', 41.0059, 28.9754);
+INSERT INTO public.attraction VALUES (29, 'Cisterna Basilica', 'Una grande cisterna sotterranea bizantina situata vicino alla Basilica di Santa Sofia.', 'Istanbul', 'Yerebatan', 41.0084, 28.9779);
+INSERT INTO public.attraction VALUES (30, 'Gran Bazar', 'Uno dei mercati coperti più grandi e antichi del mondo.', 'Istanbul', 'Beyazit', 41.01, 28.9699);
+INSERT INTO public.attraction VALUES (31, 'Moschea di Solimano', 'Una delle più grandi moschee di Istanbul, costruita nel XVI secolo.', 'Istanbul', 'Süleymaniye', 41.0153, 28.9636);
+INSERT INTO public.attraction VALUES (32, 'Ponte di Galata', 'Un famoso ponte che collega le sponde europee della città.', 'Istanbul', 'Galata Köprüsü', 41.0182, 28.9717);
+INSERT INTO public.attraction VALUES (33, 'Torre di Galata', 'Una torre medievale con una vista panoramica sulla città.', 'Istanbul', 'Bereketzade', 41.0255, 28.974);
+INSERT INTO public.attraction VALUES (34, 'Piazza Taksim', 'Una delle principali piazze di Istanbul, famosa per la sua vita notturna.', 'Istanbul', 'Taksim', 41.0369, 28.985);
+INSERT INTO public.attraction VALUES (35, 'Palazzo Dolmabahçe', 'Un palazzo ottomano del XIX secolo situato sulle rive del Bosforo.', 'Istanbul', 'Vişnezade', 41.0394, 29.0002);
+INSERT INTO public.attraction VALUES (36, 'Büyük Mecidiye Camii', 'Una grande moschea situata vicino al Bosforo, costruita nel XIX secolo.', 'Istanbul', 'Ortaköy', 41.0474, 29.0266);
+INSERT INTO public.attraction VALUES (37, 'Cerimonia dei Dervisci Rotanti', 'Lasciati stupire dalla performance musicale e dagli ipnotici dervisci rotanti nel cuore di Istanbul.', 'Istanbul', 'Hoca Rüstem Sk.', 41.0084, 28.9741);
+INSERT INTO public.attraction VALUES (38, 'Yacht lungo il Bosforo', 'Un''esperienza che offre viste spettacolari su Istanbul passando dalla Città Vecchia al Palazzo Dolmabahce.', 'Istanbul', 'Kardeşim Sk.', 41.0231, 28.9691);
+INSERT INTO public.attraction VALUES (39, 'Hammam', 'Esperienza in un tradizionale luogo di benessere e purificazione', 'Istanbul', 'Ismail Gürkan Caddesi', 41.0105, 28.9752);
+INSERT INTO public.attraction VALUES (40, 'Parapendio', 'Esperienza di parapendio in tandem lungo la costa', 'Lisbon', 'Castelo, N377', 38.5095, -9.1483);
+INSERT INTO public.attraction VALUES (41, 'Surf', 'Lezione di surf sulla spiaggia di Costa de Caparica', 'Lisbon', 'Estr. da Praia da Mata', 38.6245, -9.2218);
+INSERT INTO public.attraction VALUES (42, 'Ferrata', 'Ferrata e discesa in corda doppia nel Parco Naturale di Arrábida', 'Lisbon', 'São Lourenço, Praia do Creiro ', 38.4805, -8.9775);
+INSERT INTO public.attraction VALUES (43, 'City Climb Skyscraping', 'Raggiungi nuove vette quando sei a New York City con questo biglietto per l''attrazione City Climb.', 'New York', 'Hudson Yards', 40.754, -74.001);
+INSERT INTO public.attraction VALUES (44, 'Tour in elicottero', 'Tour per tutta Manhattan in elicottero ', 'New York', 'Downtown Manhattan Heliport', 40.7014, -74.0091);
+INSERT INTO public.attraction VALUES (45, 'Graffiti', 'Laboratorio di graffiti a Brooklyn con un artista locale', 'New York', 'Meserole St', 40.7086, -73.9369);
+INSERT INTO public.attraction VALUES (46, 'Messa Gospel', 'Isperienza immersiva nella cultura afro-americana', 'New York', '116th Street.', 40.8026, -73.9513);
+INSERT INTO public.attraction VALUES (47, 'Spa', 'Spa a Governors Island', 'New York', 'Andes Rd', 40.6926, -74.0178);
+INSERT INTO public.attraction VALUES (48, 'Yoga', 'Yoga a Central Park', 'New York', 'Central Park East', 40.7729, -73.9743);
+
+
+--
+-- TOC entry 3540 (class 0 OID 37332)
+-- Dependencies: 218
+-- Data for Name: attraction_visit; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+INSERT INTO public.attraction_visit VALUES (70, 9, 25, 7, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (1, 25, 7, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (2, 26, 7, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (3, 27, 7, 3, '15:00:00', '17:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (4, 28, 7, 4, '17:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (5, 29, 7, 5, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (6, 30, 7, 6, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (7, 31, 7, 7, '15:00:00', '17:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (8, 32, 7, 8, '17:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (9, 33, 7, 9, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (10, 34, 7, 10, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (11, 35, 7, 11, '15:00:00', '17:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (12, 36, 7, 12, '17:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (13, 25, 8, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (14, 26, 8, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (15, 27, 8, 3, '15:00:00', '17:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (16, 28, 8, 4, '17:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (17, 29, 8, 5, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (18, 30, 8, 6, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (19, 31, 8, 7, '15:00:00', '17:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (20, 32, 8, 8, '17:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (21, 33, 8, 9, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (22, 34, 8, 10, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (23, 35, 8, 11, '15:00:00', '17:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (24, 36, 8, 12, '17:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (25, 25, 9, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (26, 26, 9, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (27, 27, 9, 3, '15:00:00', '17:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (28, 28, 9, 4, '17:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (29, 29, 9, 5, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (30, 30, 9, 6, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (31, 31, 9, 7, '15:00:00', '17:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (32, 32, 9, 8, '17:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (33, 33, 9, 9, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (34, 34, 9, 10, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (35, 35, 9, 11, '15:00:00', '17:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (36, 36, 9, 12, '17:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (37, 25, 13, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (38, 26, 13, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (39, 37, 13, 3, '15:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (40, 29, 13, 4, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (41, 30, 13, 5, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (42, 38, 13, 6, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (43, 33, 13, 7, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (44, 34, 13, 8, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (45, 39, 13, 9, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (46, 25, 14, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (47, 26, 14, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (48, 37, 14, 3, '15:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (49, 29, 14, 4, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (50, 30, 14, 5, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (51, 38, 14, 6, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (52, 33, 14, 7, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (53, 34, 14, 8, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (54, 39, 14, 9, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (55, 25, 15, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (56, 26, 15, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (57, 37, 15, 3, '15:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (58, 29, 15, 4, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (59, 30, 15, 5, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (60, 38, 15, 6, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (61, 33, 15, 7, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (62, 34, 15, 8, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (63, 39, 15, 9, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (64, 1, 25, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (65, 2, 25, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (66, 40, 25, 3, '15:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (68, 6, 25, 5, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (69, 41, 25, 6, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (72, 42, 25, 9, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (67, 5, 25, 4, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (71, 10, 25, 8, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (73, 1, 26, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (74, 2, 26, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (75, 40, 26, 3, '15:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (76, 5, 26, 4, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (77, 6, 26, 5, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (78, 41, 26, 6, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (79, 9, 26, 7, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (80, 10, 26, 8, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (81, 42, 26, 9, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (82, 1, 27, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (83, 2, 27, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (84, 40, 27, 3, '15:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (85, 5, 27, 4, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (86, 6, 27, 5, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (87, 41, 27, 6, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (88, 9, 27, 7, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (89, 10, 27, 8, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (90, 42, 27, 9, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (91, 1, 31, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (92, 2, 31, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (93, 3, 31, 3, '15:00:00', '17:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (94, 4, 31, 4, '17:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (95, 5, 31, 5, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (96, 6, 31, 6, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (97, 7, 31, 7, '15:00:00', '17:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (98, 8, 31, 8, '17:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (99, 9, 31, 9, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (100, 10, 31, 10, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (101, 11, 31, 11, '15:00:00', '17:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (102, 12, 31, 12, '17:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (103, 1, 32, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (104, 2, 32, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (105, 3, 32, 3, '15:00:00', '17:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (106, 4, 32, 4, '17:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (107, 5, 32, 5, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (108, 6, 32, 6, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (109, 7, 32, 7, '15:00:00', '17:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (110, 8, 32, 8, '17:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (111, 9, 32, 9, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (112, 10, 32, 10, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (113, 11, 32, 11, '15:00:00', '17:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (114, 12, 32, 12, '17:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (115, 1, 33, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (116, 2, 33, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (117, 3, 33, 3, '15:00:00', '17:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (118, 4, 33, 4, '17:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (119, 5, 33, 5, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (120, 6, 33, 6, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (121, 7, 33, 7, '15:00:00', '17:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (122, 8, 33, 8, '17:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (123, 9, 33, 9, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (124, 10, 33, 10, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (125, 11, 33, 11, '15:00:00', '17:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (126, 12, 33, 12, '17:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (127, 13, 49, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (128, 14, 49, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (129, 43, 49, 3, '15:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (130, 17, 49, 4, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (131, 18, 49, 5, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (132, 44, 49, 6, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (133, 21, 49, 7, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (134, 22, 49, 8, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (135, 45, 49, 9, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (136, 13, 50, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (137, 14, 50, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (138, 43, 50, 3, '15:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (139, 17, 50, 4, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (140, 18, 50, 5, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (141, 44, 50, 6, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (142, 21, 50, 7, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (143, 22, 50, 8, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (144, 45, 50, 9, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (145, 13, 51, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (146, 14, 51, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (147, 43, 51, 3, '15:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (148, 17, 51, 4, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (149, 18, 51, 5, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (150, 44, 51, 6, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (151, 21, 51, 7, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (152, 22, 51, 8, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (153, 45, 51, 9, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (154, 13, 55, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (155, 14, 55, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (156, 15, 55, 3, '15:00:00', '17:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (157, 16, 55, 4, '17:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (158, 17, 55, 5, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (159, 18, 55, 6, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (160, 19, 55, 7, '15:00:00', '17:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (161, 20, 55, 8, '17:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (162, 21, 55, 9, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (163, 22, 55, 10, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (164, 23, 55, 11, '15:00:00', '17:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (165, 24, 55, 12, '17:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (166, 13, 56, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (167, 14, 56, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (168, 15, 56, 3, '15:00:00', '17:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (169, 16, 56, 4, '17:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (170, 17, 56, 5, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (171, 18, 56, 6, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (172, 19, 56, 7, '15:00:00', '17:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (173, 20, 56, 8, '17:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (174, 21, 56, 9, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (175, 22, 56, 10, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (176, 23, 56, 11, '15:00:00', '17:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (177, 24, 56, 12, '17:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (178, 13, 57, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (179, 14, 57, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (180, 15, 57, 3, '15:00:00', '17:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (181, 16, 57, 4, '17:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (182, 17, 57, 5, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (183, 18, 57, 6, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (184, 19, 57, 7, '15:00:00', '17:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (185, 20, 57, 8, '17:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (186, 21, 57, 9, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (187, 22, 57, 10, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (188, 23, 57, 11, '15:00:00', '17:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (189, 24, 57, 12, '17:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (190, 13, 61, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (191, 14, 61, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (192, 46, 61, 3, '15:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (193, 17, 61, 4, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (194, 18, 61, 5, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (195, 47, 61, 6, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (196, 21, 61, 7, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (197, 22, 61, 8, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (198, 48, 61, 9, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (199, 13, 62, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (200, 14, 62, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (201, 46, 62, 3, '15:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (202, 17, 62, 4, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (203, 18, 62, 5, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (204, 47, 62, 6, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (205, 21, 62, 7, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (206, 22, 62, 8, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (207, 48, 62, 9, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (208, 13, 63, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (209, 14, 63, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (210, 46, 63, 3, '15:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (211, 17, 63, 4, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (212, 18, 63, 5, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (213, 47, 63, 6, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (214, 21, 63, 7, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (215, 22, 63, 8, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (216, 48, 63, 9, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (217, 13, 67, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (218, 14, 67, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (219, 15, 67, 3, '15:00:00', '17:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (220, 16, 67, 4, '17:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (221, 17, 67, 5, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (222, 18, 67, 6, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (223, 43, 67, 7, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (224, 21, 67, 8, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (225, 22, 67, 9, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (226, 47, 67, 10, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (227, 13, 68, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (228, 14, 68, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (229, 15, 68, 3, '15:00:00', '17:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (230, 16, 68, 4, '17:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (231, 17, 68, 5, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (232, 18, 68, 6, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (233, 43, 68, 7, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (234, 21, 68, 8, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (235, 22, 68, 9, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (236, 47, 68, 10, '15:00:00', '19:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (237, 13, 69, 1, '09:00:00', '11:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (238, 14, 69, 2, '11:00:00', '13:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (239, 15, 69, 3, '15:00:00', '17:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (240, 16, 69, 4, '17:00:00', '19:00:00', 1);
+INSERT INTO public.attraction_visit VALUES (241, 17, 69, 5, '09:00:00', '11:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (242, 18, 69, 6, '11:00:00', '13:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (243, 43, 69, 7, '15:00:00', '19:00:00', 2);
+INSERT INTO public.attraction_visit VALUES (244, 21, 69, 8, '09:00:00', '11:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (245, 22, 69, 9, '11:00:00', '13:00:00', 3);
+INSERT INTO public.attraction_visit VALUES (246, 47, 69, 10, '15:00:00', '19:00:00', 3);
+
+
+--
+-- TOC entry 3545 (class 0 OID 37339)
+-- Dependencies: 223
+-- Data for Name: faq; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+INSERT INTO public.faq VALUES (1, 'Come funziona il sito?', 'EpicTrip offre la possibilità di acquistare dei pacchetti di viaggio completi, comprensivi di prenotazione di hotel, di ristoranti e di guide. Sono incluse anche le mappe del percorso studiato per visitare al meglio la città in base alle vostre esigenze.
+Prenotare un pacchetto è semplicissimo, basterà compilare un questionario sulle vostre preferenze e vi sarà fornito il pacchetto perfetto per voi!');
+INSERT INTO public.faq VALUES (2, 'Quali destinazioni sono disponibili per la prenotazione?', 'EpicTrip al momento offre itinerari per:
+-New York
+-Lisbona
+-Istanbul
+
+Puntiamo ad espandere il nostro catalogo al più presto!');
+INSERT INTO public.faq VALUES (3, 'Quali sono le date disponibili per il mio viaggio?', 'Compilando il questionario di EpicTrip potrai scegliere la data che preferisci per il tuo viaggio!');
+INSERT INTO public.faq VALUES (4, 'C''è un''opzione di pagamento rateizzato?', 'Al momento EpicTrip non fornisce quest''opzione.');
+INSERT INTO public.faq VALUES (5, 'Come posso contattare l''assistenza clienti in caso di domande o problemi?', 'Troverai tutti i contatti di EpicTrip nell''apposita sezione del sito.');
+INSERT INTO public.faq VALUES (6, 'Quali sono i documenti necessari per il viaggio, come visti o passaporti?', 'EpicTrip vi consiglia di consultare il sito ViaggiareSicuri del Ministero degli Affari Esteri per controllare i documenti necessari.');
+INSERT INTO public.faq VALUES (7, 'Posso prenotare un pacchetto per un''altra persona?', 'EpicTrip consente la prenotazione per un gruppo di persone ma non consente l''intestazione della prenotazione a terzi.');
+INSERT INTO public.faq VALUES (8, 'Quali servizi sono inclusi nel prezzo del pacchetto e quali sono opzionali?', 'Tutti i servizi proposti da EpicTrip sono inclusi nel prezzo del pacchetto!');
+INSERT INTO public.faq VALUES (9, 'Quali sono le restrizioni di età per prenotare determinati pacchetti o attività?', 'EpicTrip consente la prenotazione di pacchetti solo alle persone maggiorenni.');
+INSERT INTO public.faq VALUES (10, 'Posso richiedere un upgrade dell''alloggio dopo aver effettuato la prenotazione?', 'EpicTrip al momento non consente questa opzione.');
+
+
+--
+-- TOC entry 3547 (class 0 OID 37346)
+-- Dependencies: 225
+-- Data for Name: guide; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+INSERT INTO public.guide VALUES (1, 'Gianfranco', 'Canovacci', '1993-06-17', '3253693571', 'Italy', 'Florence', 'Via dei Tornabuoni', 12, '50123', 'Gianfri@gmail.com', 'Maschio', 'Ciao! Sono Gianfranco. Sarò la tua guida per questa esperienza fantastica a Lisbona!
+Conosco profondamente questa città e mi ha sempre affascinato. Vivo da 5 anni qui e ho avuto la fortuna di esplorare ogni angolo di questa splendida capitale, immergendomi nella sua storia, cultura e vita quotidiana. Pronti a partire?', 'Lisbon');
+INSERT INTO public.guide VALUES (4, 'Martina', 'Giglio', '1984-09-08', '3784568537', 'Italy', 'Bologna', 'Via Zamboni', 64, '40126', 'mgiglio@yahoo.it', 'Femmina', 'Mi chiamo Martina Giglio, e sono la vostra guida in questo splendido viaggio con EpicTrip, pronta a condividere con voi i segreti e le meraviglie che rendono Lisbona unica.
+La mia avventura con Lisbona è iniziata durante un''indimenticabile esperienza di Erasmus, che mi ha fatto innamorare di questa città. Da allora, ho continuato a tornarci spesso, approfondendo la mia conoscenza e sviluppando una passione inesauribile per tutto ciò che Lisbona ha da offrire.
+Vi porterò a mangiare i Pastel de nata, a visitare il Convento do Carmo e ad affrontare le discese, ma soprattutto le salite di Lisbona. :D', 'Lisbon');
+INSERT INTO public.guide VALUES (2, 'Francesca', 'Muccichini', '1990-11-25', '3453697536', 'Italy', 'Milan', 'Via della Moscova', 8, '20121', 'francescamuccichini@gmail.com', 'Femmina', 'Mi chiamo Francesca, e sono qui per accompagnarvi in un viaggio attraverso i quartieri più famosi e le gemme nascoste di New York. Sono profondamente innamorata di New York e sono appassionata nel condividere la sua bellezza e il suo fascino con gli altri. La mia passione per questa città traspare in ogni dettaglio della mia guida. Affidati a me e ti porterò ad ammirare lo skyline più bello del mondo!', 'New York');
+INSERT INTO public.guide VALUES (3, 'Ciro', 'Avitabile', '1988-06-11', '3241654857', 'Italy', 'Naples', 'Via Toledo', 36, '80132', 'ciruzzo@gmail.com', 'Maschio', 'Ciao a tutti! Mi chiamo Ciro e sono un appasionato di questa città che è il crocevia fra Oriente e Occidente. Sono felice di portarvi grazie ad EpicTrip alla scoperta di Istanbul, una città che considero la mia seconda casa e che ho avuto il privilegio di esplorare a fondo nel corso degli anni. Mangiando un Simit e visitando il Palazzo di Topkapi ci divertiremo ogni minuto. İnşallah!', 'Istanbul');
+INSERT INTO public.guide VALUES (5, 'Simone', 'Mammone', '1990-01-24', '3241109579', 'Italy', 'Turin', 'Via Po', 16, '10123', 'simon90@outlook.it', 'Altro', 'Ciao a tutti! Mi chiamo Simone e sarò la vostra guida EpicTrip per esplorare la fantastica città di New York. Il mio amore per questa città è nato durante una visita anni fa, quando ho passeggiato per la prima volta attraverso Central Park e sono rimasto incantato dalle luci di Times Square. Mi sono perso tra i vicoli del Greenwich Village, scoprendo caffè accoglienti e librerie storiche. Da quel momento, ho amato l''energia e la diversità di New York. Non vedo l''ora di condividere con voi le mie storie e i miei luoghi preferiti, rendendo il vostro viaggio nella Grande Mela indimenticabile!', 'New York');
+INSERT INTO public.guide VALUES (6, 'Emanuele', 'Di Lorenzo', '1995-04-10', '3438524194', 'Italy', 'Bari', 'Corso Vittorio Emanuele II', 128, '70122', 'edilorenzo95@outlook.it', 'Maschio', 'Mi chiamo Emanuele e sono entusiasta di accompagnarvi alla scoperta di una delle città più affascinanti e ricche di storia del mondo: Istanbul. Situata a cavallo tra l''Europa e l''Asia, Istanbul è un crocevia di culture, tradizioni e sapori che saprà incantarvi ad ogni passo. Che siate appassionati di storia, amanti della buona cucina o semplicemente curiosi di scoprire nuovi orizzonti, la mia missione è rendere il vostro soggiorno a Istanbul indimenticabile. Preparatevi a vivere un''esperienza unica, ricca di emozioni e sorprese. Siete pronti a partire? Lasciate che vi mostri Istanbul attraverso i miei occhi.', 'Istanbul');
+
+
+--
+-- TOC entry 3548 (class 0 OID 37353)
+-- Dependencies: 226
+-- Data for Name: guide_reservation; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+
+
+--
+-- TOC entry 3551 (class 0 OID 37359)
+-- Dependencies: 229
+-- Data for Name: hotel; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+INSERT INTO public.hotel VALUES (1, 'Pod 51 Hotel', 'USA', 'New York', 'East 51st Street', 230, '10022-6571', '+12123550300', 'reservations@podhotel51.com', 4, '$', 40.7558, -73.969, 0.05);
+INSERT INTO public.hotel VALUES (2, 'HI New York City Hostel', 'USA', 'New York', 'Amsterdam Ave', 891, '10025', '+12129322300', 'NewYork@hiusa.org', 4, '$', 40.7987, -73.9665, 0.05);
+INSERT INTO public.hotel VALUES (3, 'Homewood Suites by Hilton', 'USA', 'New York', 'West 37th Street', 312, '10018', '+12122440644', 'NYCMM_Homewood@hilton.com', 4.5, '$$', 40.7545, -73.9931, 0.05);
+INSERT INTO public.hotel VALUES (5, 'Crosby Street Hotel', 'USA', 'New York', 'Crosby St', 79, '10012-3905', '+12122266400', 'crosby@firmdale.com', 5, '$$$', 40.7231, -73.9975, 0.05);
+INSERT INTO public.hotel VALUES (4, 'Warwick New York', 'USA', 'New York', 'West 54th Street', 65, '10019', '+12122472700', 'infoboxny@warwickhotels.com', 4.5, '$$', 40.7624, -73.9781, 0.05);
+INSERT INTO public.hotel VALUES (6, 'The Plaza New York', 'USA', 'New York', 'Fifth Avenue', 768, '10019', '+16466634630', 'plazareservation@fairmont.com', 4.5, '$$$', 40.7648, -73.9742, 0.05);
+INSERT INTO public.hotel VALUES (7, 'Radisson Hotel', 'Turkey', 'Istanbul', 'Sultanahmet Mah. Kennedy Cad', 12, '34122', '+902125162313', 'info.sultanahmet@radisson.com', 4.5, '$', 41.0036, 28.9817, 0.05);
+INSERT INTO public.hotel VALUES (8, 'Idylle Hotel', 'Turkey', 'Istanbul', 'Hocapaşa Mahallesi Ebusuud Street', 2, '34110', '+902125110290', 'info@idyllehotel.com', 5, '$', 41.0119, 28.978, 0.05);
+INSERT INTO public.hotel VALUES (9, 'Seven Hills Hotel', 'Turkey', 'Istanbul', 'Cankurtaran Tevkifhane Sokak', 8, '34400', '+902125169497
+
+', 'info@sevenhillshotel.com', 4.5, '$$', 41.0064, 28.9797, 0.05);
+INSERT INTO public.hotel VALUES (10, 'Aprilis Gold Hotel', 'Turkey', 'Istanbul', 'Emin Sinan Hamam Sok.', 5, '34126', '+902126389700', 'info@aprilisgoldhotel.com', 5, '$$', 41.007, 28.9702, 0.05);
+INSERT INTO public.hotel VALUES (11, 'Mula Hotel', 'Turkey', 'Istanbul', 'Küçük Ayasofya Mah. Çayıroğlu Sok.', 46, '34122', '+904446852', 'info@mulahotel.com', 5, '$$$', 41.0029, 28.9752, 0.05);
+INSERT INTO public.hotel VALUES (12, 'Sultanahmet Palace Hotel', 'Turkey', 'Istanbul', 'Torun Sok.', 19, '34122', '+902124580460', 'info@sultanahmetpalace.com', 4.5, '$$$', 41.0047, 28.9779, 0.05);
+INSERT INTO public.hotel VALUES (16, 'HF Fenix Garden', 'Portugal', 'Lisbon', 'Rua Joaquim Antonio de Aguiar', 3, '1050-010', '+351213717120', 'booking.garden@hfhotels.com', 4.5, '$$', 38.7251, -9.1517, 0.05);
+INSERT INTO public.hotel VALUES (13, 'Hotel Ibis Lisboa Jose Malhoa', 'Portugal', 'Lisbon', 'Avenida José Malhoa', 10, '1070-158', '+351217235700', 'h1668@accor.com', 4, '$', 38.737, -9.1631, 0.05);
+INSERT INTO public.hotel VALUES (14, 'Residencial Horizonte', 'Portugal', 'Lisbon', 'Avenida Antonio Augusto De Aguiar', 42, '1050-017', '+351213539526', 'geral@residencialhorizonte.pt', 3, '$', 38.7299, -9.15, 0.05);
+INSERT INTO public.hotel VALUES (15, 'Holiday Inn Lisbon', 'Portugal', 'Lisbon', 'Avenida Antonio Jose de Almeida', 28, '1000-044', '+351800871698', 'hil@continentalhotels.eu', 4, '$$', 38.7389, -9.1419, 0.05);
+INSERT INTO public.hotel VALUES (17, 'Hotel Britania Art Deco', 'Portugal', 'Lisbon', 'Rua Rodrigues Sampaio', 17, '1150-278', '+351308809716', 'britania.hotel@heritage.pt', 5, '$$$', 38.7215, -9.1454, 0.05);
+INSERT INTO public.hotel VALUES (18, 'Hotel Avenida Palace', 'Portugal', 'Lisbon', 'Rua 1 Dezembro', 123, '1200-359', '+351308810721', 'reservas@hotelavenidapalace.pt', 5, '$$$', 38.7148, -9.1409, 0.05);
+
+
+--
+-- TOC entry 3553 (class 0 OID 37369)
+-- Dependencies: 231
+-- Data for Name: hotel_reservation; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+
+
+--
+-- TOC entry 3554 (class 0 OID 37377)
+-- Dependencies: 232
+-- Data for Name: nearby_restaurant; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+INSERT INTO public.nearby_restaurant VALUES (1, 1, 2, 0.055);
+INSERT INTO public.nearby_restaurant VALUES (2, 2, 2, 0.087);
+INSERT INTO public.nearby_restaurant VALUES (3, 3, 2, 0.5);
+INSERT INTO public.nearby_restaurant VALUES (4, 4, 6, 0.17);
+INSERT INTO public.nearby_restaurant VALUES (5, 5, 6, 0.45);
+INSERT INTO public.nearby_restaurant VALUES (6, 6, 6, 0.5);
+INSERT INTO public.nearby_restaurant VALUES (7, 7, 10, 0.35);
+INSERT INTO public.nearby_restaurant VALUES (8, 8, 10, 0.049);
+INSERT INTO public.nearby_restaurant VALUES (9, 9, 10, 0.4);
+INSERT INTO public.nearby_restaurant VALUES (10, 10, 14, 0.65);
+INSERT INTO public.nearby_restaurant VALUES (11, 11, 14, 0.16);
+INSERT INTO public.nearby_restaurant VALUES (12, 12, 14, 0.45);
+INSERT INTO public.nearby_restaurant VALUES (13, 13, 18, 0.17);
+INSERT INTO public.nearby_restaurant VALUES (14, 14, 18, 0.26);
+INSERT INTO public.nearby_restaurant VALUES (15, 15, 18, 0.26);
+INSERT INTO public.nearby_restaurant VALUES (16, 16, 22, 0.85);
+INSERT INTO public.nearby_restaurant VALUES (17, 17, 22, 1.2);
+INSERT INTO public.nearby_restaurant VALUES (18, 18, 22, 0.8);
+INSERT INTO public.nearby_restaurant VALUES (19, 19, 26, 0.6);
+INSERT INTO public.nearby_restaurant VALUES (20, 20, 26, 0.28);
+INSERT INTO public.nearby_restaurant VALUES (21, 21, 26, 0.4);
+INSERT INTO public.nearby_restaurant VALUES (22, 22, 30, 0.5);
+INSERT INTO public.nearby_restaurant VALUES (23, 23, 30, 0.6);
+INSERT INTO public.nearby_restaurant VALUES (24, 24, 30, 0.033);
+INSERT INTO public.nearby_restaurant VALUES (25, 25, 34, 0.24);
+INSERT INTO public.nearby_restaurant VALUES (26, 26, 34, 0.15);
+INSERT INTO public.nearby_restaurant VALUES (27, 27, 34, 0.6);
+
+
+--
+-- TOC entry 3555 (class 0 OID 37380)
+-- Dependencies: 233
+-- Data for Name: package; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+INSERT INTO public.package VALUES (7, 3, 'city_tour', 'Turkey', 'Istanbul', '$', 'Tour della Città di Istanbul 3 Giorni - $', 'Un tour completo dei monumenti iconici e dei tesori nascosti di Istanbul in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (8, 3, 'city_tour', 'Turkey', 'Istanbul', '$$', 'Tour della Città di Istanbul 3 Giorni - $$', 'Un tour completo dei monumenti iconici e dei tesori nascosti di Istanbul in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (1, 3, 'adventure', 'Turkey', 'Istanbul', '$', 'Avventura a Istanbul 3 Giorni - $', 'Esplora la vibrante cultura e la storia di Istanbul con avventure emozionanti in 3 giorni.', 10, false);
+INSERT INTO public.package VALUES (2, 3, 'adventure', 'Turkey', 'Istanbul', '$$', 'Avventura a Istanbul 3 Giorni - $$', 'Esplora la vibrante cultura e la storia di Istanbul con avventure emozionanti in 3 giorni.', 10, false);
+INSERT INTO public.package VALUES (3, 3, 'adventure', 'Turkey', 'Istanbul', '$$$', 'Avventura a Istanbul 3 Giorni - $$$', 'Esplora la vibrante cultura e la storia di Istanbul con avventure emozionanti in 3 giorni.', 10, false);
+INSERT INTO public.package VALUES (4, 5, 'adventure', 'Turkey', 'Istanbul', '$', 'Avventura a Istanbul 5 Giorni - $', 'Esplora la vibrante cultura e la storia di Istanbul con avventure emozionanti in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (5, 5, 'adventure', 'Turkey', 'Istanbul', '$$', 'Avventura a Istanbul 5 Giorni - $$', 'Esplora la vibrante cultura e la storia di Istanbul con avventure emozionanti in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (6, 5, 'adventure', 'Turkey', 'Istanbul', '$$$', 'Avventura a Istanbul 5 Giorni - $$$', 'Esplora la vibrante cultura e la storia di Istanbul con avventure emozionanti in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (10, 5, 'city_tour', 'Turkey', 'Istanbul', '$', 'Tour della Città di Istanbul 5 Giorni - $', 'Un tour completo dei monumenti iconici e dei tesori nascosti di Istanbul in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (11, 5, 'city_tour', 'Turkey', 'Istanbul', '$$', 'Tour della Città di Istanbul 5 Giorni - $$', 'Un tour completo dei monumenti iconici e dei tesori nascosti di Istanbul in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (12, 5, 'city_tour', 'Turkey', 'Istanbul', '$$$', 'Tour della Città di Istanbul 5 Giorni - $$$', 'Un tour completo dei monumenti iconici e dei tesori nascosti di Istanbul in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (16, 5, 'relax', 'Turkey', 'Istanbul', '$', 'Relax a Istanbul 5 Giorni - $', 'Goditi un soggiorno rilassante nella affascinante città di Istanbul per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (17, 5, 'relax', 'Turkey', 'Istanbul', '$$', 'Relax a Istanbul 5 Giorni - $$', 'Goditi un soggiorno rilassante nella affascinante città di Istanbul per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (18, 5, 'relax', 'Turkey', 'Istanbul', '$$$', 'Relax a Istanbul 5 Giorni - $$$', 'Goditi un soggiorno rilassante nella affascinante città di Istanbul per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (19, 3, 'mix', 'Turkey', 'Istanbul', '$', 'Mix a Istanbul 3 Giorni - $', 'Un perfetto mix di avventura e relax a Istanbul per 3 giorni.', 10, false);
+INSERT INTO public.package VALUES (20, 3, 'mix', 'Turkey', 'Istanbul', '$$', 'Mix a Istanbul 3 Giorni - $$', 'Un perfetto mix di avventura e relax a Istanbul per 3 giorni.', 10, false);
+INSERT INTO public.package VALUES (21, 3, 'mix', 'Turkey', 'Istanbul', '$$$', 'Mix a Istanbul 3 Giorni - $$$', 'Un perfetto mix di avventura e relax a Istanbul per 3 giorni.', 10, false);
+INSERT INTO public.package VALUES (22, 5, 'mix', 'Turkey', 'Istanbul', '$', 'Mix a Istanbul 5 Giorni - $', 'Un perfetto mix di avventura e relax a Istanbul per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (23, 5, 'mix', 'Turkey', 'Istanbul', '$$', 'Mix a Istanbul 5 Giorni - $$', 'Un perfetto mix di avventura e relax a Istanbul per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (24, 5, 'mix', 'Turkey', 'Istanbul', '$$$', 'Mix a Istanbul 5 Giorni - $$$', 'Un perfetto mix di avventura e relax a Istanbul per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (28, 5, 'adventure', 'Portugal', 'Lisbon', '$', 'Avventura a Lisbona 5 Giorni - $', 'Scopri le avventure piu emozionanti di Lisbona in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (29, 5, 'adventure', 'Portugal', 'Lisbon', '$$', 'Avventura a Lisbona 5 Giorni - $$', 'Scopri le avventure piu emozionanti di Lisbona in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (30, 5, 'adventure', 'Portugal', 'Lisbon', '$$$', 'Avventura a Lisbona 5 Giorni - $$$', 'Scopri le avventure piu emozionanti di Lisbona in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (34, 5, 'city_tour', 'Portugal', 'Lisbon', '$', 'Tour della Città di Lisbona 5 Giorni - $', 'Scopri la bellezza e la storia di Lisbona con il nostro tour della città in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (35, 5, 'city_tour', 'Portugal', 'Lisbon', '$$', 'Tour della Città di Lisbona 5 Giorni - $$', 'Scopri la bellezza e la storia di Lisbona con il nostro tour della città in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (36, 5, 'city_tour', 'Portugal', 'Lisbon', '$$$', 'Tour della Città di Lisbona 5 Giorni - $$$', 'Scopri la bellezza e la storia di Lisbona con il nostro tour della città in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (37, 3, 'relax', 'Portugal', 'Lisbon', '$', 'Relax a Lisbona 3 Giorni - $', 'Goditi un tempo di pace e relax a Lisbona per 3 giorni.', 10, false);
+INSERT INTO public.package VALUES (38, 3, 'relax', 'Portugal', 'Lisbon', '$$', 'Relax a Lisbona 3 Giorni - $$', 'Goditi un tempo di pace e relax a Lisbona per 3 giorni.', 10, false);
+INSERT INTO public.package VALUES (39, 3, 'relax', 'Portugal', 'Lisbon', '$$$', 'Relax a Lisbona 3 Giorni - $$$', 'Goditi un tempo di pace e relax a Lisbona per 3 giorni.', 10, false);
+INSERT INTO public.package VALUES (40, 5, 'relax', 'Portugal', 'Lisbon', '$', 'Relax a Lisbona 5 Giorni - $', 'Goditi un tempo di pace e relax a Lisbona per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (41, 5, 'relax', 'Portugal', 'Lisbon', '$$', 'Relax a Lisbona 5 Giorni - $$', 'Goditi un tempo di pace e relax a Lisbona per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (42, 5, 'relax', 'Portugal', 'Lisbon', '$$$', 'Relax a Lisbona 5 Giorni - $$$', 'Goditi un tempo di pace e relax a Lisbona per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (43, 3, 'mix', 'Portugal', 'Lisbon', '$', 'Mix a Lisbona 3 Giorni - $', 'Vivi il meglio di Lisbona con un mix di tour e relax in 3 giorni.', 10, false);
+INSERT INTO public.package VALUES (44, 3, 'mix', 'Portugal', 'Lisbon', '$$', 'Mix a Lisbona 3 Giorni - $$', 'Vivi il meglio di Lisbona con un mix di tour e relax in 3 giorni.', 10, false);
+INSERT INTO public.package VALUES (45, 3, 'mix', 'Portugal', 'Lisbon', '$$$', 'Mix a Lisbona 3 Giorni - $$$', 'Vivi il meglio di Lisbona con un mix di tour e relax in 3 giorni.', 10, false);
+INSERT INTO public.package VALUES (46, 5, 'mix', 'Portugal', 'Lisbon', '$', 'Mix a Lisbona 5 Giorni - $', 'Vivi il meglio di Lisbona con un mix di tour e relax in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (47, 5, 'mix', 'Portugal', 'Lisbon', '$$', 'Mix a Lisbona 5 Giorni - $$', 'Vivi il meglio di Lisbona con un mix di tour e relax in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (48, 5, 'mix', 'Portugal', 'Lisbon', '$$$', 'Mix a Lisbona 5 Giorni - $$$', 'Vivi il meglio di Lisbona con un mix di tour e relax in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (52, 5, 'adventure', 'USA', 'New York', '$', 'Avventura a New York 5 Giorni - $', 'Un viaggio avventuroso attraverso le strade affollate di New York in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (53, 5, 'adventure', 'USA', 'New York', '$$', 'Avventura a New York 5 Giorni - $$', 'Un viaggio avventuroso attraverso le strade affollate di New York in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (54, 5, 'adventure', 'USA', 'New York', '$$$', 'Avventura a New York 5 Giorni - $$$', 'Un viaggio avventuroso attraverso le strade affollate di New York in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (58, 5, 'city_tour', 'USA', 'New York', '$', 'Tour della Città di New York 5 Giorni - $', 'Scopri i luoghi iconici e i suoni di New York City in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (59, 5, 'city_tour', 'USA', 'New York', '$$', 'Tour della Città di New York 5 Giorni - $$', 'Scopri i luoghi iconici e i suoni di New York City in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (60, 5, 'city_tour', 'USA', 'New York', '$$$', 'Tour della Città di New York 5 Giorni - $$$', 'Scopri i luoghi iconici e i suoni di New York City in 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (64, 5, 'relax', 'USA', 'New York', '$', 'Relax a New York 5 Giorni - $', 'Prenditi una pausa e rilassati nei luoghi tranquilli di New York City per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (65, 5, 'relax', 'USA', 'New York', '$$', 'Relax a New York 5 Giorni - $$', 'Prenditi una pausa e rilassati nei luoghi tranquilli di New York City per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (66, 5, 'relax', 'USA', 'New York', '$$$', 'Relax a New York 5 Giorni - $$$', 'Prenditi una pausa e rilassati nei luoghi tranquilli di New York City per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (70, 5, 'mix', 'USA', 'New York', '$', 'Mix a New York 5 Giorni - $', 'Goditi una combinazione di eccitazione e relax a New York per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (71, 5, 'mix', 'USA', 'New York', '$$', 'Mix a New York 5 Giorni - $$', 'Goditi una combinazione di eccitazione e relax a New York per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (72, 5, 'mix', 'USA', 'New York', '$$$', 'Mix a New York 5 Giorni - $$$', 'Goditi una combinazione di eccitazione e relax a New York per 5 giorni.', 10, false);
+INSERT INTO public.package VALUES (9, 3, 'city_tour', 'Turkey', 'Istanbul', '$$$', 'Tour della Città di Istanbul 3 Giorni - $$$', 'Un tour completo dei monumenti iconici e dei tesori nascosti di Istanbul in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (13, 3, 'relax', 'Turkey', 'Istanbul', '$', 'Relax a Istanbul 3 Giorni - $', 'Goditi un soggiorno rilassante nella affascinante città di Istanbul per 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (14, 3, 'relax', 'Turkey', 'Istanbul', '$$', 'Relax a Istanbul 3 Giorni - $$', 'Goditi un soggiorno rilassante nella affascinante città di Istanbul per 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (15, 3, 'relax', 'Turkey', 'Istanbul', '$$$', 'Relax a Istanbul 3 Giorni - $$$', 'Goditi un soggiorno rilassante nella affascinante città di Istanbul per 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (25, 3, 'adventure', 'Portugal', 'Lisbon', '$', 'Avventura a Lisbona 3 Giorni - $', 'Esplora i luoghi piu emozionanti e avventurosi di Lisbona in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (26, 3, 'adventure', 'Portugal', 'Lisbon', '$$', 'Avventura a Lisbona 3 Giorni - $$', 'Esplora i luoghi piu emozionanti e avventurosi di Lisbona in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (27, 3, 'adventure', 'Portugal', 'Lisbon', '$$$', 'Avventura a Lisbona 3 Giorni - $$$', 'Esplora i luoghi piu emozionanti e avventurosi di Lisbona in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (31, 3, 'city_tour', 'Portugal', 'Lisbon', '$', 'Tour della Città di Lisbona 3 Giorni - $', 'Scopri la bellezza e la storia di Lisbona con il nostro tour della città in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (32, 3, 'city_tour', 'Portugal', 'Lisbon', '$$', 'Tour della Città di Lisbona 3 Giorni - $$', 'Scopri la bellezza e la storia di Lisbona con il nostro tour della città in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (33, 3, 'city_tour', 'Portugal', 'Lisbon', '$$$', 'Tour della Città di Lisbona 3 Giorni - $$$', 'Scopri la bellezza e la storia di Lisbona con il nostro tour della città in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (49, 3, 'adventure', 'USA', 'New York', '$', 'Avventura a New York 3 Giorni - $', 'Un viaggio avventuroso attraverso le strade affollate di New York in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (50, 3, 'adventure', 'USA', 'New York', '$$', 'Avventura a New York 3 Giorni - $$', 'Un viaggio avventuroso attraverso le strade affollate di New York in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (51, 3, 'adventure', 'USA', 'New York', '$$$', 'Avventura a New York 3 Giorni - $$$', 'Un viaggio avventuroso attraverso le strade affollate di New York in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (55, 3, 'city_tour', 'USA', 'New York', '$', 'Tour della Città di New York 3 Giorni - $', 'Scopri i luoghi iconici e i suoni di New York City in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (56, 3, 'city_tour', 'USA', 'New York', '$$', 'Tour della Città di New York 3 Giorni - $$', 'Scopri i luoghi iconici e i suoni di New York City in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (57, 3, 'city_tour', 'USA', 'New York', '$$$', 'Tour della Città di New York 3 Giorni - $$$', 'Scopri i luoghi iconici e i suoni di New York City in 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (61, 3, 'relax', 'USA', 'New York', '$', 'Relax a New York 3 Giorni - $', 'Prenditi una pausa e rilassati nei luoghi tranquilli di New York City per 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (62, 3, 'relax', 'USA', 'New York', '$$', 'Relax a New York 3 Giorni - $$', 'Prenditi una pausa e rilassati nei luoghi tranquilli di New York City per 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (63, 3, 'relax', 'USA', 'New York', '$$$', 'Relax a New York 3 Giorni - $$$', 'Prenditi una pausa e rilassati nei luoghi tranquilli di New York City per 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (67, 3, 'mix', 'USA', 'New York', '$', 'Mix a New York 3 Giorni - $', 'Goditi una combinazione di eccitazione e relax a New York per 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (68, 3, 'mix', 'USA', 'New York', '$$', 'Mix a New York 3 Giorni - $$', 'Goditi una combinazione di eccitazione e relax a New York per 3 giorni.', 10, true);
+INSERT INTO public.package VALUES (69, 3, 'mix', 'USA', 'New York', '$$$', 'Mix a New York 3 Giorni - $$$', 'Goditi una combinazione di eccitazione e relax a New York per 3 giorni.', 10, true);
+
+
+--
+-- TOC entry 3557 (class 0 OID 37389)
+-- Dependencies: 235
+-- Data for Name: package_reservation; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+
+
+--
+-- TOC entry 3560 (class 0 OID 37397)
+-- Dependencies: 238
+-- Data for Name: reaction; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+INSERT INTO public.reaction VALUES (1, 1, 2);
+INSERT INTO public.reaction VALUES (2, 2, 1);
+INSERT INTO public.reaction VALUES (3, 1, 3);
+INSERT INTO public.reaction VALUES (4, 3, 1);
+INSERT INTO public.reaction VALUES (5, 2, 3);
+INSERT INTO public.reaction VALUES (8, 4, 2);
+INSERT INTO public.reaction VALUES (9, 5, 3);
+INSERT INTO public.reaction VALUES (6, 4, 5);
+INSERT INTO public.reaction VALUES (7, 5, 4);
+
+
+--
+-- TOC entry 3562 (class 0 OID 37402)
+-- Dependencies: 240
+-- Data for Name: restaurant; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+INSERT INTO public.restaurant VALUES (3, 'Grenache', 'Portugal', 'Lisbon', 'patio de dom Fradique', 12, '1120-624', '+351 21 887 1616', 'grenache.lisboa@gmail.com', '$$$', 4.5, 38.7124, -9.1317);
+INSERT INTO public.restaurant VALUES (2, 'Bistrô Gato Pardo', 'Portugal', 'Lisbon', 'Rua de Sao Vicente', 10, '1100-574', '+351 21 887 3647', 'bbgatopardo@gmail.com', '$$', 4.5, 38.7147, -9.129);
+INSERT INTO public.restaurant VALUES (1, 'O Vicentinho', 'Portugal', 'Lisbon', 'Rua Voz do Operario', 1, '1100-620', '+351 21 888 1025', NULL, '$', 4, 38.7148, -9.1287);
+INSERT INTO public.restaurant VALUES (4, 'Confeitaria Nacional Belém', 'Portugal', 'Lisbon', 'Torre de Belem Cais da Princesa', 1, '1400-038', '+351 21 342 4470', 'socialmedia@confeitarianacional.com', '$', 4, 38.6919, -9.2139);
+INSERT INTO public.restaurant VALUES (5, 'O Navegador', 'Portugal', 'Lisbon', 'R. da Praia do Bom-Sucesso', 44, '1400-038', '+351 967 697 508', NULL, '$$', 4, 38.6948, -9.2142);
+INSERT INTO public.restaurant VALUES (6, 'Restaurante Ânfora', 'Portugal', 'Lisbon', 'Rua Bartolomeu Dias', 117, '1400-027', '+351 21 246 7800', 'palaciodogovernador@nauhotels.com', '$$$', 4, 38.6945, -9.2148);
+INSERT INTO public.restaurant VALUES (7, 'Restaurante Rio Coura', 'Portugal', 'Lisbon', 'R. Augusto Rosa', 20, '1100-091', '+351 21 886 9867', 'riocoura1980@gmail.com', '$', 4, 38.7102, -9.132);
+INSERT INTO public.restaurant VALUES (8, 'Lisboa Tu & Eu 1', 'Portugal', 'Lisbon', 'Rua da Adica', 58, '1100-008', '+351 939 927 339', 'lisboatueeu.58@gmail.com', '$$', 4.5, 38.7094, -9.133);
+INSERT INTO public.restaurant VALUES (9, 'Terroir Restaurante', 'Portugal', 'Lisbon', 'Rua dos Fanqueiros', 182, '1100-232', '+351 21 887 3823', 'info@terroirrestaurante.pt', '$$$', 4.5, 38.7114, -9.1362);
+INSERT INTO public.restaurant VALUES (10, 'Starbucks', 'USA', 'New York', '87th St', 120, '10128-1116', '+1 212-426-2580', NULL, '$', 4, 40.7797, -73.9554);
+INSERT INTO public.restaurant VALUES (11, 'Bluestone Lane', 'USA', 'New York', '90th St', 2, '10128-0603', '+1 646-869-7812', 'support@bluestone-lane.zendesk.com', '$$', 4.5, 40.7838, -73.9584);
+INSERT INTO public.restaurant VALUES (12, 'Vicolina', 'USA', 'New York', 'Madison Ave', 1302, '10128-1351', '+1 212-464-8426', 'hello@vicolinanyc.com', '$$$', 4, 40.7849, -73.9559);
+INSERT INTO public.restaurant VALUES (14, 'Amaze', 'USA', 'New York', '3rd Ave', 694, '10017', '+1 212-986-5555', NULL, '$$', 4, 40.7519, -73.9738);
+INSERT INTO public.restaurant VALUES (15, 'Sushi Yasuda', 'USA', 'New York', '43rd Street', 204, '10017-4713', '+1 212-972-1001', 'scott@sushiyasuda.com', '$$$', 4.5, 40.7511, -73.9734);
+INSERT INTO public.restaurant VALUES (16, 'Pearl Street Diner', 'USA', 'New York', 'Pearl St', 221, '10038', '+1 212-344-6620', NULL, '$', 4, 40.707, -74.0063);
+INSERT INTO public.restaurant VALUES (17, 'Luke’s Lobster', 'USA', 'New York', 'William St', 26, '10004-2495', '+1 212-747-1700', 'mktg@lukeslobster.com', '$$', 4.5, 40.7045, -74.0106);
+INSERT INTO public.restaurant VALUES (18, 'The Capital Grille', 'USA', 'New York', 'Broadway', 120, '10271', '+1 212-374-1811', 'info@thecapitalgrille.com', '$$$', 4.5, 40.7078, -74.0101);
+INSERT INTO public.restaurant VALUES (19, 'Kosk Kebap', 'Turkey', 'Istanbul', 'Alaykosku Cad.', 21, '34110', '+90 537 633 36 62', NULL, '$', 5, 41.0104, 28.9772);
+INSERT INTO public.restaurant VALUES (20, 'Turk Art Terrace Restaurant', 'Turkey', 'Istanbul', 'Tevkifhane Sokak', 12, '34122', '+90 530 562 44 21', 'turkartterracerestaurant@gmail.com', '$$', 5, 41.0062, 28.9799);
+INSERT INTO public.restaurant VALUES (21, 'Sultanahmet 360 Panorama Restaurant', 'Turkey', 'Istanbul', 'Yerebatan Caddesi', 18, '34110', '+90 539 777 45 57', 'muhasebe@remzierbas.com', '$$$', 5, 41.0089, 28.9774);
+INSERT INTO public.restaurant VALUES (22, 'YIldIz Bufe - Since 1967', 'Turkey', 'Istanbul', 'Hacı Kucuk Sk.', 19, '34120', '+90 212 522 82 07', 'posta@yildizbufe.com', '$', 5, 41.0139, 28.9705);
+INSERT INTO public.restaurant VALUES (23, 'GRACE Rooftop Restaurant', 'Turkey', 'Istanbul', 'Binbirdirek mah. Terzihane sok', 15, '34122', '+90 542 844 44 73', 'sefprens@hotmail.com', '$$', 5, 41.0064, 28.9735);
+INSERT INTO public.restaurant VALUES (24, 'Nusr-Et Steakhouse Sandal Bedesteni', 'Turkey', 'Istanbul', 'Ç. Nuruosmaniye Cd.', 47, '34126', '+90 850 202 6778', NULL, '$$$', 4, 41.0103, 28.9699);
+INSERT INTO public.restaurant VALUES (25, 'Beyoglu Halk Doner', 'Turkey', 'Istanbul', 'Istiklal Cd.', 20, '34435', '+90 212 243 67 59', 'fr.talep@bereketdoner.com.tr', '$', 4, 41.0358, 28.9829);
+INSERT INTO public.restaurant VALUES (26, 'Hafiz Mustafa 1864', 'Turkey', 'Istanbul', 'Siraselviler Cad.', 7, '34437', '+90 212 243 38 47', 'sosyalmedya@hafizmustafa.com', '$$', 4.5, 41.0364, 28.9851);
+INSERT INTO public.restaurant VALUES (27, 'City Lights Bar', 'Turkey', 'Istanbul', 'Asker Ocagi Cad.', 1, '34435', '+90 212 368 44 44', 'info@citylightsbarist.com', '$$$', 4.5, 41.0402, 28.9881);
+INSERT INTO public.restaurant VALUES (13, '$1.50 Fresh Pizza', 'USA', 'New York', '43rd St', 151, '10017', '+12129220257', NULL, '$', 5, 40.7516, -73.9743);
+
+
+--
+-- TOC entry 3564 (class 0 OID 37409)
+-- Dependencies: 242
+-- Data for Name: restaurant_reservation; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+
+
+--
+-- TOC entry 3567 (class 0 OID 37415)
+-- Dependencies: 245
+-- Data for Name: review; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+INSERT INTO public.review VALUES (1, 1, 'Il mio viaggio a New York con EpicTrip è stato STUPENDO! Era tutto organizzato alla perfezione e la guida era molto preparata e disponibile. Niente da dire nemmeno sui ristoranti e sugli alberghi proposti, anche a prezzi onesti. Lo consiglio vivamente! :)', 5);
+INSERT INTO public.review VALUES (2, 2, 'Sono stato ad Istanbul seguendo un itinerario di questo sito e non potevo fare una scelta migliore. Tutto perfetto, tranne un piccolo problema al check-in dell''albergo, causa mancanza di conoscenza della lingua inglese.
+Da rifare!', 4);
+INSERT INTO public.review VALUES (3, 3, 'Ho visitato Lisbona utilizzando EpicTrip e l''ho trovato molto comodo e intuitivo.', 4);
+INSERT INTO public.review VALUES (4, 4, 'Grazie ad EpicTrip ho potuto avere questa esperienza fantastica a New York.
+È stata l''esperienza più bella della mia vita, un viaggio indimenticabile!', 5);
+INSERT INTO public.review VALUES (5, 5, 'Bello! Grandi!', 5);
+
+
+--
+-- TOC entry 3568 (class 0 OID 37420)
+-- Dependencies: 246
+-- Data for Name: survey; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+INSERT INTO public.survey VALUES (1, 'Che città vuoi visitare?');
+INSERT INTO public.survey VALUES (2, 'Per quante persone vuoi prenotare questo viaggio?');
+INSERT INTO public.survey VALUES (3, 'Che giorno vuoi partire?');
+INSERT INTO public.survey VALUES (4, 'Quanti giorni vuoi stare?');
+INSERT INTO public.survey VALUES (5, 'Che tipo di viaggio vuoi fare?');
+INSERT INTO public.survey VALUES (6, 'Quanto vuoi spendere?');
+
+
+--
+-- TOC entry 3569 (class 0 OID 37423)
+-- Dependencies: 247
+-- Data for Name: survey_answer; Type: TABLE DATA; Schema: public; Owner: postgresMaster
+--
+
+
+
+--
+-- TOC entry 3586 (class 0 OID 0)
+-- Dependencies: 215
+-- Name: app_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.app_user_id_seq', 5, true);
+
+
+--
+-- TOC entry 3587 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: attraction_visit_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.attraction_visit_id_seq', 246, true);
+
+
+--
+-- TOC entry 3588 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: attractions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.attractions_id_seq', 48, true);
+
+
+--
+-- TOC entry 3589 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: comment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.comment_id_seq', 1, false);
+
+
+--
+-- TOC entry 3590 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: faq_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.faq_id_seq', 10, true);
+
+
+--
+-- TOC entry 3591 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: guide_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.guide_id_seq', 6, true);
+
+
+--
+-- TOC entry 3592 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: guide_reservation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.guide_reservation_id_seq', 1, true);
+
+
+--
+-- TOC entry 3593 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: hotel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.hotel_id_seq', 18, true);
+
+
+--
+-- TOC entry 3594 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: hotel_reservation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.hotel_reservation_id_seq', 1, true);
+
+
+--
+-- TOC entry 3595 (class 0 OID 0)
+-- Dependencies: 234
+-- Name: package_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.package_id_seq', 3, true);
+
+
+--
+-- TOC entry 3596 (class 0 OID 0)
+-- Dependencies: 236
+-- Name: package_reservation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.package_reservation_id_seq', 1, true);
+
+
+--
+-- TOC entry 3597 (class 0 OID 0)
+-- Dependencies: 237
+-- Name: reaction_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.reaction_id_seq', 9, true);
+
+
+--
+-- TOC entry 3598 (class 0 OID 0)
+-- Dependencies: 239
+-- Name: restaurant_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.restaurant_id_seq', 27, true);
+
+
+--
+-- TOC entry 3599 (class 0 OID 0)
+-- Dependencies: 241
+-- Name: restaurant_near_attractions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.restaurant_near_attractions_id_seq', 27, true);
+
+
+--
+-- TOC entry 3600 (class 0 OID 0)
+-- Dependencies: 243
+-- Name: restaurant_reservation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.restaurant_reservation_id_seq', 1, false);
+
+
+--
+-- TOC entry 3601 (class 0 OID 0)
+-- Dependencies: 244
+-- Name: review_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.review_id_seq', 5, true);
+
+
+--
+-- TOC entry 3602 (class 0 OID 0)
+-- Dependencies: 248
+-- Name: survey_answer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.survey_answer_id_seq', 1, true);
+
+
+--
+-- TOC entry 3603 (class 0 OID 0)
+-- Dependencies: 249
+-- Name: survey_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
+--
+
+SELECT pg_catalog.setval('public.survey_id_seq', 6, true);
+
+
+--
+-- TOC entry 3344 (class 2606 OID 37439)
+-- Name: app_user app_user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.app_user
+    ADD CONSTRAINT app_user_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3348 (class 2606 OID 37441)
+-- Name: attraction_visit attraction_visit_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.attraction_visit
+    ADD CONSTRAINT attraction_visit_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3346 (class 2606 OID 37443)
+-- Name: attraction attractions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.attraction
+    ADD CONSTRAINT attractions_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3316 (class 2606 OID 37444)
+-- Name: guide check_if_adult; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.guide
+    ADD CONSTRAINT check_if_adult CHECK ((birthdate <= (CURRENT_DATE - '18 years'::interval))) NOT VALID;
+
+
+--
+-- TOC entry 3317 (class 2606 OID 37445)
+-- Name: guide check_if_at_least_eight_numbers; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.guide
+    ADD CONSTRAINT check_if_at_least_eight_numbers CHECK ((length((telephone_number)::text) >= 8)) NOT VALID;
+
+
+--
+-- TOC entry 3322 (class 2606 OID 37446)
+-- Name: hotel check_if_at_least_eight_numbers; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.hotel
+    ADD CONSTRAINT check_if_at_least_eight_numbers CHECK ((length((telephone_number)::text) >= 8)) NOT VALID;
+
+
+--
+-- TOC entry 3325 (class 2606 OID 37447)
+-- Name: hotel_reservation check_if_check_in_is_valid; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.hotel_reservation
+    ADD CONSTRAINT check_if_check_in_is_valid CHECK ((reservation_date < check_in)) NOT VALID;
+
+
+--
+-- TOC entry 3339 (class 2606 OID 37448)
+-- Name: restaurant_reservation check_if_reservation_date_is_valid; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.restaurant_reservation
+    ADD CONSTRAINT check_if_reservation_date_is_valid CHECK ((reservation_date < check_in)) NOT VALID;
+
+
+--
+-- TOC entry 3319 (class 2606 OID 37449)
+-- Name: guide_reservation check_if_reservation_date_is_valid; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.guide_reservation
+    ADD CONSTRAINT check_if_reservation_date_is_valid CHECK ((reservation_date < start_performance_date)) NOT VALID;
+
+
+--
+-- TOC entry 3320 (class 2606 OID 37450)
+-- Name: guide_reservation check_if_startdate_is_before_end; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.guide_reservation
+    ADD CONSTRAINT check_if_startdate_is_before_end CHECK ((start_performance_date < end_performance_date)) NOT VALID;
+
+
+--
+-- TOC entry 3314 (class 2606 OID 37451)
+-- Name: attraction_visit check_if_starttime_is_before_endtime; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.attraction_visit
+    ADD CONSTRAINT check_if_starttime_is_before_endtime CHECK ((start_time < end_time)) NOT VALID;
+
+
+--
+-- TOC entry 3318 (class 2606 OID 37452)
+-- Name: guide check_if_valid_workplace; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.guide
+    ADD CONSTRAINT check_if_valid_workplace CHECK (((workplace)::text = ANY (ARRAY[('Lisbon'::character varying)::text, ('New York'::character varying)::text, ('Istanbul'::character varying)::text]))) NOT VALID;
+
+
+--
+-- TOC entry 3335 (class 2606 OID 37453)
+-- Name: package_reservation check_start_date_after_creation_date; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.package_reservation
+    ADD CONSTRAINT check_start_date_after_creation_date CHECK ((start_date > creation_date)) NOT VALID;
+
+
+--
+-- TOC entry 3321 (class 2606 OID 37454)
+-- Name: guide_reservation date_difference_check; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.guide_reservation
+    ADD CONSTRAINT date_difference_check CHECK ((((end_performance_date - start_performance_date) = 2) OR ((end_performance_date - start_performance_date) = 4))) NOT VALID;
+
+
+--
+-- TOC entry 3329 (class 2606 OID 37455)
+-- Name: hotel_reservation date_difference_check; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.hotel_reservation
+    ADD CONSTRAINT date_difference_check CHECK (((((check_out)::date - (check_in)::date) = 2) OR (((check_out)::date - (check_in)::date) = 4))) NOT VALID;
+
+
+--
+-- TOC entry 3352 (class 2606 OID 37457)
+-- Name: faq faq_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.faq
+    ADD CONSTRAINT faq_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3354 (class 2606 OID 37459)
+-- Name: guide guide_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.guide
+    ADD CONSTRAINT guide_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3356 (class 2606 OID 37461)
+-- Name: guide_reservation guide_reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.guide_reservation
+    ADD CONSTRAINT guide_reservation_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3358 (class 2606 OID 37463)
+-- Name: hotel hotel_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.hotel
+    ADD CONSTRAINT hotel_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3360 (class 2606 OID 37465)
+-- Name: hotel_reservation hotel_reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.hotel_reservation
+    ADD CONSTRAINT hotel_reservation_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3334 (class 2606 OID 37466)
+-- Name: package max_ten_people; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.package
+    ADD CONSTRAINT max_ten_people CHECK ((max_people_count <= 10)) NOT VALID;
+
+
+--
+-- TOC entry 3336 (class 2606 OID 37467)
+-- Name: package_reservation max_ten_people; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.package_reservation
+    ADD CONSTRAINT max_ten_people CHECK ((people_count <= 10)) NOT VALID;
+
+
+--
+-- TOC entry 3330 (class 2606 OID 37468)
+-- Name: hotel_reservation max_ten_people; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.hotel_reservation
+    ADD CONSTRAINT max_ten_people CHECK ((people_count <= 10)) NOT VALID;
+
+
+--
+-- TOC entry 3340 (class 2606 OID 37469)
+-- Name: restaurant_reservation max_ten_people; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.restaurant_reservation
+    ADD CONSTRAINT max_ten_people CHECK (((people_count <= 10) AND (people_count > 0))) NOT VALID;
+
+
+--
+-- TOC entry 3364 (class 2606 OID 37471)
+-- Name: package package_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.package
+    ADD CONSTRAINT package_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3366 (class 2606 OID 37473)
+-- Name: package_reservation package_reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.package_reservation
+    ADD CONSTRAINT package_reservation_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3368 (class 2606 OID 37475)
+-- Name: reaction reaction_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.reaction
+    ADD CONSTRAINT reaction_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3362 (class 2606 OID 37477)
+-- Name: nearby_restaurant restaurant_near_attractions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.nearby_restaurant
+    ADD CONSTRAINT restaurant_near_attractions_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3370 (class 2606 OID 37479)
+-- Name: restaurant restaurant_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.restaurant
+    ADD CONSTRAINT restaurant_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3372 (class 2606 OID 37481)
+-- Name: restaurant_reservation restaurant_reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.restaurant_reservation
+    ADD CONSTRAINT restaurant_reservation_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3374 (class 2606 OID 37483)
+-- Name: review review_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.review
+    ADD CONSTRAINT review_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3378 (class 2606 OID 37485)
+-- Name: survey_answer survey_answer_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.survey_answer
+    ADD CONSTRAINT survey_answer_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3376 (class 2606 OID 37487)
+-- Name: survey survey_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.survey
+    ADD CONSTRAINT survey_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3350 (class 2606 OID 37489)
+-- Name: attraction_visit unique_package_attraction_order; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.attraction_visit
+    ADD CONSTRAINT unique_package_attraction_order UNIQUE (package_id, attraction_order);
+
+
+--
+-- TOC entry 3342 (class 2606 OID 37490)
+-- Name: survey_answer valid_answer; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE public.survey_answer
+    ADD CONSTRAINT valid_answer CHECK ((((question_id = 1) AND ((answer)::text = ANY (ARRAY[('Lisbona'::character varying)::text, ('New York'::character varying)::text, ('Istanbul'::character varying)::text]))) OR ((question_id = 2) AND ((answer)::text ~ '^\d+$'::text) AND ((answer)::integer >= 1) AND ((answer)::integer <= 10)))) NOT VALID;
+
+
+--
+-- TOC entry 3379 (class 2606 OID 37491)
+-- Name: attraction_visit fk_attraction_visit_attraction; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.attraction_visit
+    ADD CONSTRAINT fk_attraction_visit_attraction FOREIGN KEY (attraction_id) REFERENCES public.attraction(id) NOT VALID;
+
+
+--
+-- TOC entry 3380 (class 2606 OID 37496)
+-- Name: attraction_visit fk_attraction_visit_package; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.attraction_visit
+    ADD CONSTRAINT fk_attraction_visit_package FOREIGN KEY (package_id) REFERENCES public.package(id) NOT VALID;
+
+
+--
+-- TOC entry 3381 (class 2606 OID 37501)
+-- Name: guide_reservation fk_guide_reservation_guide; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.guide_reservation
+    ADD CONSTRAINT fk_guide_reservation_guide FOREIGN KEY (guide_id) REFERENCES public.guide(id);
+
+
+--
+-- TOC entry 3382 (class 2606 OID 37506)
+-- Name: guide_reservation fk_guide_reservation_package; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.guide_reservation
+    ADD CONSTRAINT fk_guide_reservation_package FOREIGN KEY (package_id) REFERENCES public.package(id) NOT VALID;
+
+
+--
+-- TOC entry 3383 (class 2606 OID 37511)
+-- Name: hotel_reservation fk_hotel_reservation_hotel; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.hotel_reservation
+    ADD CONSTRAINT fk_hotel_reservation_hotel FOREIGN KEY (hotel_id) REFERENCES public.hotel(id);
+
+
+--
+-- TOC entry 3384 (class 2606 OID 37516)
+-- Name: hotel_reservation fk_hotel_reservation_package_reservation; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.hotel_reservation
+    ADD CONSTRAINT fk_hotel_reservation_package_reservation FOREIGN KEY (package_reservation_id) REFERENCES public.package_reservation(id) NOT VALID;
+
+
+--
+-- TOC entry 3385 (class 2606 OID 37521)
+-- Name: nearby_restaurant fk_nearby_restaurant_attraction; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.nearby_restaurant
+    ADD CONSTRAINT fk_nearby_restaurant_attraction FOREIGN KEY (attraction_id) REFERENCES public.attraction(id) NOT VALID;
+
+
+--
+-- TOC entry 3386 (class 2606 OID 37526)
+-- Name: nearby_restaurant fk_nearby_restaurant_restaurant; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.nearby_restaurant
+    ADD CONSTRAINT fk_nearby_restaurant_restaurant FOREIGN KEY (restaurant_id) REFERENCES public.restaurant(id) NOT VALID;
+
+
+--
+-- TOC entry 3387 (class 2606 OID 37531)
+-- Name: reaction fk_reaction_app_user; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.reaction
+    ADD CONSTRAINT fk_reaction_app_user FOREIGN KEY (user_id) REFERENCES public.app_user(id);
+
+
+--
+-- TOC entry 3388 (class 2606 OID 37536)
+-- Name: reaction fk_reaction_review; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.reaction
+    ADD CONSTRAINT fk_reaction_review FOREIGN KEY (review_id) REFERENCES public.review(id);
+
+
+--
+-- TOC entry 3389 (class 2606 OID 37541)
+-- Name: restaurant_reservation fk_restaurant_reservation_package_reservation; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.restaurant_reservation
+    ADD CONSTRAINT fk_restaurant_reservation_package_reservation FOREIGN KEY (package_reservation_id) REFERENCES public.package_reservation(id) NOT VALID;
+
+
+--
+-- TOC entry 3390 (class 2606 OID 37546)
+-- Name: restaurant_reservation fk_restaurant_reservation_restaurant; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.restaurant_reservation
+    ADD CONSTRAINT fk_restaurant_reservation_restaurant FOREIGN KEY (restaurant_id) REFERENCES public.restaurant(id);
+
+
+--
+-- TOC entry 3391 (class 2606 OID 37551)
+-- Name: review fk_review_app_user; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.review
+    ADD CONSTRAINT fk_review_app_user FOREIGN KEY (user_id) REFERENCES public.app_user(id);
+
+
+--
+-- TOC entry 3392 (class 2606 OID 37556)
+-- Name: survey_answer fk_survey_answer_app_user; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.survey_answer
+    ADD CONSTRAINT fk_survey_answer_app_user FOREIGN KEY (user_id) REFERENCES public.app_user(id);
+
+
+--
+-- TOC entry 3393 (class 2606 OID 37561)
+-- Name: survey_answer fk_survey_answer_survey; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+--
+
+ALTER TABLE ONLY public.survey_answer
+    ADD CONSTRAINT fk_survey_answer_survey FOREIGN KEY (question_id) REFERENCES public.survey(id);
+
+
+-- Completed on 2024-06-11 11:11:58 UTC
+
+--
+-- PostgreSQL database dump complete
+--
+
