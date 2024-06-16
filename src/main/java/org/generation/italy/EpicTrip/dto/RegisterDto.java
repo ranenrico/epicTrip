@@ -6,16 +6,21 @@ import org.generation.italy.EpicTrip.utils.DateUtils;
 import java.time.LocalDate;
 
 public class RegisterDto {
-    private AppUserDto userDto;
+    private AppUserDto user;
     private String password;
 
     public RegisterDto(AppUserDto userDto, String password) {
-        this.userDto = userDto;
+        this.user = userDto;
         this.password = password;
     }
-    public AppUser getUserDto() {
-        LocalDate birthdate = DateUtils.parse(userDto.getBirthdate());
-        return new AppUser(userDto.getId(), userDto.getFirstname(), userDto.getLastname(), birthdate, userDto.getTelephoneNumber(), userDto.getCountry(), userDto.getCity(), userDto.getStreet(), userDto.getHouseNumber(), userDto.getPostalCode(), userDto.getEmail(), userDto.getGender(), password);
+    public AppUser toUser() {
+        LocalDate birthdate = DateUtils.parse(user.getBirthdate());
+        return new AppUser(user.getId(), user.getFirstname(), user.getLastname(), birthdate,
+                user.getTelephoneNumber(), user.getCountry(), user.getCity(), user.getStreet(),
+                user.getHouseNumber(), user.getPostalCode(), user.getEmail(), user.getGender(), password);
+    }
+    public AppUserDto getUser(){
+        return this.user;
     }
 
     public String getPassword() {
@@ -23,7 +28,14 @@ public class RegisterDto {
     }
 
     public String getEmail(){
-        return userDto.getEmail();
+        return user.getEmail();
     }
 
+    public void setUser(AppUserDto user) {
+        this.user = user;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
