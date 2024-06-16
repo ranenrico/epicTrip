@@ -33,10 +33,12 @@ public class HolidayPackageController {
         List<String> packageTypes = this.holidayService.getPackageTypes();
         return ResponseEntity.ok(packageTypes);
     }
-    @PostMapping
+    @PostMapping("/find")
     public ResponseEntity<HolidayPackageDto> findHolidayPackage(@RequestBody SurveyInfoDto si) {
         Optional<HolidayPackage> ohp = holidayService.find(si);
-        return ohp.map(HolidayPackageDto::new).map(ResponseEntity.ok()::body).orElse(ResponseEntity.ok().build());
+        return ohp.map(HolidayPackageDto::new)
+                .map(ResponseEntity.ok()::body)
+                .orElse(ResponseEntity.ok().build());
         //        if(ohp.isEmpty()){
         //            return ResponseEntity.ok().build();
         //        }

@@ -26,14 +26,15 @@ public class UserController {
     AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public RegisterDto register(@RequestBody AppUser user) {
+    public RegisterDto register(@RequestBody RegisterDto registerUserDto) {
+       AppUser user = registerUserDto.getUserDto();
        AppUser userSaved = service.saveUser(user);
        AppUserDto userDto = new AppUserDto(user);
        return new RegisterDto(userDto, user.getPassword());
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody AppUser user){
+    public String login(@RequestBody RegisterDto user){
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));

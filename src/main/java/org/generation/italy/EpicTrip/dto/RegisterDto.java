@@ -17,4 +17,13 @@ public class RegisterDto {
         LocalDate birthdate = DateUtils.parse(userDto.getBirthdate());
         return new AppUser(userDto.getId(), userDto.getFirstname(), userDto.getLastname(), birthdate, userDto.getTelephoneNumber(), userDto.getCountry(), userDto.getCity(), userDto.getStreet(), userDto.getHouseNumber(), userDto.getPostalCode(), userDto.getEmail(), userDto.getGender(), password);
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getEmail(){
+        return userDto.getEmail();
+    }
+
 }
