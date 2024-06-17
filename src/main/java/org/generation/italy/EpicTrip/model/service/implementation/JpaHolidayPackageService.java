@@ -6,6 +6,7 @@ import org.generation.italy.EpicTrip.model.repository.abstraction.HolidayPackage
 import org.generation.italy.EpicTrip.model.service.abstraction.HolidayPackageService;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +26,8 @@ public class JpaHolidayPackageService implements HolidayPackageService {
 
     @Override
     public List<HolidayPackage> findPackageByCity(String city) {
-        return hpr.findByCityAndActiveTrue(city);
+        List<HolidayPackage> hp = hpr.findByCityAndActiveTrue(city);
+        return hp.stream().sorted(Comparator.comparingLong(HolidayPackage::getId)).toList();
     }
 
     @Override
