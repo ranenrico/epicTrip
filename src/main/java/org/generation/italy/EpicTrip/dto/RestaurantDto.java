@@ -18,13 +18,12 @@ public class RestaurantDto {
     private double tripadvisorRating;
     private double latitude;
     private double longitude;
-    private Attraction attraction;
-    private double distance;
+    private String priceRange;
 
     public RestaurantDto() {
     }
 
-    public RestaurantDto(Restaurant r, NearbyRestaurant n) {
+    public RestaurantDto(Restaurant r) {
         this.id=r.getId();
         this.name=r.getName();
         this.country=r.getCountry();
@@ -37,8 +36,7 @@ public class RestaurantDto {
         this.tripadvisorRating=r.getTripadvisorRating();
         this.latitude=r.getLatitude();
         this.longitude=r.getLongitude();
-        this.attraction=n.getAttraction();
-        this.distance=n.getDistance();
+        this.priceRange=r.getPriceRange();
     }
 
     public long getId() {
@@ -89,16 +87,13 @@ public class RestaurantDto {
         return longitude;
     }
 
-    public Attraction getAttraction() {
-        return attraction;
+    public String getPriceRange() {
+        return priceRange;
     }
 
-    public double getDistance() {
-        return distance;
-    }
     public Restaurant toRestaurant(){
         return new Restaurant(this.id, this.name, this.country, this.city, this.street,
                  this.houseNumber, this.postalCode, this.telephoneNumber, this.email, this.tripadvisorRating,
-                this.latitude, this.longitude);
+                this.latitude, this.longitude, this.priceRange);
     }
 }

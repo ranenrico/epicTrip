@@ -62,5 +62,8 @@ public class UserPrincipal implements UserDetails{
         return true;
     }
 
+    public AppUser getUser() {
+        return user;
+    }
 }
 

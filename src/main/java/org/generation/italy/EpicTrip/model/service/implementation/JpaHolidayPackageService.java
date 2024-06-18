@@ -39,4 +39,9 @@ public class JpaHolidayPackageService implements HolidayPackageService {
     public List<String> getPackageTypes() {
         return hpr.getHolidayPackageTypes();
     }
+
+    @Override
+    public Optional<HolidayPackage> findById(long id) {
+        return hpr.findById(id);
+    }
 }

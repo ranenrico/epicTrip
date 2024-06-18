@@ -15,9 +15,12 @@ public class AttractionVisitDto {
     private String attractionDescription;
     private int attractionOrder;
     private int visitDay;
+    private String city;
+    private long packageId;
 
     public AttractionVisitDto() {
     }
+
     public AttractionVisitDto(AttractionVisit av) {
         this.id=av.getId();
         this.attractionId=av.getAttraction().getId();
@@ -25,6 +28,8 @@ public class AttractionVisitDto {
         this.attractionDescription=av.getAttraction().getDescription();
         this.attractionOrder=av.getAttractionOrder();
         this.visitDay=av.getVisitDay();
+        this.city=av.getAttraction().getCity();
+        this.packageId = av.getHolidayPackage().getId();
     }
 
     public long getId() {
@@ -49,5 +54,13 @@ public class AttractionVisitDto {
 
     public int getVisitDay() {
         return visitDay;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public long getPackageId() {
+        return packageId;
     }
 }

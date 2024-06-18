@@ -8,10 +8,8 @@ import org.generation.italy.EpicTrip.model.service.abstraction.GuideService;
 import org.generation.italy.EpicTrip.model.service.abstraction.HotelService;
 import org.generation.italy.EpicTrip.model.service.abstraction.RestaurantService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,35 +17,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/holiday-reservation")
 public class ReservationController {
-    private RestaurantService restaurantService;
-    private HotelService hotelService;
-    private GuideService guideService;
 
-    public ReservationController(RestaurantService restaurantService, HotelService hotelService, GuideService guideService) {
-        this.restaurantService = restaurantService;
-        this.hotelService = hotelService;
-        this.guideService = guideService;
+    public ReservationController() {
     }
-    //saranno 3 get 1 guida, 2 ristoranti 3 albergo (che url gli diamo pensando al frontend)
-    //cosa prendono in input?
-    //nome?
-    @GetMapping("/guide")
-    public ResponseEntity<GuideDto> findGuideByCity(@RequestParam String city){
-       Optional<Guide> guideOpt = guideService.findGuideByCity(city);
-        return guideOpt.map(GuideDto::new)
-                .map(ResponseEntity.ok()::body)
-                .orElse(ResponseEntity.ok().build());
+
+    @PostMapping
+    public ResponseEntity<?> createReservation(@AuthenticationPrincipal UserPrincipal principal){
+        System.out.println(principal.getUsername());
+        System.out.println(principal.getUser().getId());
+        return ResponseEntity.ok().build();
     }
-    @GetMapping("/hotel")
-    public ResponseEntity<HotelDto> findHotelByPackage(@RequestParam Long packageId){
-        Optional<Hotel> hotelOpt= hotelService.findHotelByPackage(packageId);
-        return hotelOpt.map(HotelDto::new)
-                .map(ResponseEntity.ok()::body)
-                .orElse(ResponseEntity.ok().build());
-    }
-//    @GetMapping("/restaurant")
-//    public ResponseEntity<RestaurantDto> findRestaurantNearByAttraction(@RequestParam long attractionId){
-//        Restaurant restaurant=restaurantService.findRestaurantNearByAttraction(attractionId);
-//        return ResponseEntity.ok().body(restaurant);
-//    }
 }

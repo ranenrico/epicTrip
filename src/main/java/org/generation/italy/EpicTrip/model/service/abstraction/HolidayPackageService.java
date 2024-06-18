@@ -14,4 +14,6 @@ public interface HolidayPackageService {
     List<String> getCities();
 
     List<String> getPackageTypes();
+
+    Optional<HolidayPackage> findById(long id);
 }

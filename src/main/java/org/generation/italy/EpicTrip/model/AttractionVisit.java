@@ -49,4 +49,8 @@ public class AttractionVisit {
     public int getVisitDay() {
         return visitDay;
     }
+
+    public HolidayPackage getHolidayPackage() {
+        return holidayPackage;
+    }
 }

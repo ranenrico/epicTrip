@@ -46,6 +46,14 @@ public class Attraction {
     public String getDescription() {
         return description;
     }
+
+    public String getCity() {
+        return city;
+    }
+
+    public List<NearbyRestaurant> getNearbyRestaurants() {
+        return nearbyRestaurants;
+    }
 }
 
 

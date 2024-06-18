@@ -53,7 +53,7 @@ public class Restaurant {
 
     public Restaurant(long id, String name, String country, String city, String street, int houseNumber,
                       String postalCode, String telephoneNumber, String email, double tripadvisorRating,
-                      double latitude, double longitude) {
+                      double latitude, double longitude, String priceRange) {
         this.id = id;
         this.name = name;
         this.country = country;
@@ -66,6 +66,7 @@ public class Restaurant {
         this.tripadvisorRating = tripadvisorRating;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.priceRange = priceRange;
     }
 
     public long getId() {
@@ -114,5 +115,9 @@ public class Restaurant {
 
     public double getLongitude() {
         return longitude;
+    }
+
+    public String getPriceRange() {
+        return priceRange;
     }
 }

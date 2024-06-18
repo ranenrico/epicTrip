@@ -30,4 +30,8 @@ public class NearbyRestaurant {
     public double getDistance() {
         return distance;
     }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
 }
