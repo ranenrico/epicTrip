@@ -45,7 +45,7 @@ public class HolidayPackageController {
         List<String> packageTypes = this.holidayService.getPackageTypes();
         return ResponseEntity.ok(packageTypes);
     }
-    @PostMapping("/find")
+    @PostMapping
     public ResponseEntity<HolidayPackageDto> findHolidayPackage(@RequestBody SurveyInfoDto si) {
         Optional<HolidayPackage> ohp = holidayService.find(si);
         return ohp.map(HolidayPackageDto::new)
