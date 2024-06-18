@@ -53,4 +53,41 @@ public class Guide {
     @Column(name = "workplace", nullable = false, length = 32)
     private String workplace;
 
+    public Guide(long id, String firstName, String lastName, String telephoneNumber, String email, String introduction, String workplace) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.telephoneNumber = telephoneNumber;
+        this.email = email;
+        this.introduction = introduction;
+        this.workplace = workplace;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getTelephoneNumber() {
+        return telephoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public String getWorkplace() {
+        return workplace;
+    }
 }

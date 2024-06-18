@@ -9,8 +9,6 @@ import java.util.List;
 @Entity
 @Table(name = "hotel")
 public class Hotel {
-    public Hotel() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,5 +52,69 @@ public class Hotel {
 
     @Column(name = "commission", nullable = false)
     private BigDecimal commission;
+    public Hotel() {
+    }
 
+    public Hotel(long id, String name, String country, String city, String street, int houseNumber, String postalCode, String telephoneNumber, String email, double tripadvisorRating, double latitude, double longitude) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
+        this.city = city;
+        this.street = street;
+        this.houseNumber = houseNumber;
+        this.postalCode = postalCode;
+        this.telephoneNumber = telephoneNumber;
+        this.email = email;
+        this.tripadvisorRating = tripadvisorRating;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public int getHouseNumber() {
+        return houseNumber;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public String getTelephoneNumber() {
+        return telephoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public double getTripadvisorRating() {
+        return tripadvisorRating;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
 }

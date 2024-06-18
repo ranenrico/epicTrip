@@ -23,4 +23,11 @@ public class NearbyRestaurant {
     @Column(name = "distance", nullable = false)
     private double distance;
 
+    public Attraction getAttraction() {
+        return attraction;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
 }
