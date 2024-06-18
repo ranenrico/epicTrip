@@ -17,6 +17,7 @@ public class AttractionVisitDto {
     private int visitDay;
     private String city;
     private long packageId;
+    private String image;
 
     public AttractionVisitDto() {
     }
@@ -30,6 +31,7 @@ public class AttractionVisitDto {
         this.visitDay=av.getVisitDay();
         this.city=av.getAttraction().getCity();
         this.packageId = av.getHolidayPackage().getId();
+        this.image = av.getAttraction().getImage();
     }
 
     public long getId() {
@@ -62,5 +64,9 @@ public class AttractionVisitDto {
 
     public long getPackageId() {
         return packageId;
+    }
+
+    public String getImage() {
+        return image;
     }
 }

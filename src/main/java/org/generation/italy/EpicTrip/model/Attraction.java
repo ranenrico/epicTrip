@@ -32,6 +32,9 @@ public class Attraction {
     @Column(name = "longitude", nullable = false)
     private double longitude;
 
+    @Column(name = "image_path")
+    private String image;
+
     @OneToMany(mappedBy = "attraction", cascade = {CascadeType.REMOVE})
     private List<NearbyRestaurant> nearbyRestaurants = new ArrayList<>();
 
@@ -53,6 +56,10 @@ public class Attraction {
 
     public List<NearbyRestaurant> getNearbyRestaurants() {
         return nearbyRestaurants;
+    }
+
+    public String getImage() {
+        return image;
     }
 }
 
