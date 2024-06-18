@@ -80,17 +80,17 @@ public class HolidayPackageController {
         }
     }
 
-    @GetMapping("/guide")
-    public ResponseEntity<GuideDto> findGuideByCity(@RequestParam String city){
+    @GetMapping("/{city}/guide")
+    public ResponseEntity<GuideDto> findGuideByCity(@PathVariable String city){
         Optional<Guide> guideOpt = guideService.findGuideByCity(city);
         return guideOpt.map(GuideDto::new)
                 .map(ResponseEntity.ok()::body)
                 .orElse(ResponseEntity.ok().build());
     }
 
-    @GetMapping("/hotel")
-    public ResponseEntity<HotelDto> findHotelByPackage(@RequestParam Long packageId){
-        Optional<Hotel> hotelOpt= hotelService.findHotelByPackage(packageId);
+    @GetMapping("/{id}/hotel")
+    public ResponseEntity<HotelDto> findHotelByPackage(@PathVariable long id){
+        Optional<Hotel> hotelOpt= hotelService.findHotelByPackage(id);
         return hotelOpt.map(HotelDto::new)
                 .map(ResponseEntity.ok()::body)
                 .orElse(ResponseEntity.ok().build());

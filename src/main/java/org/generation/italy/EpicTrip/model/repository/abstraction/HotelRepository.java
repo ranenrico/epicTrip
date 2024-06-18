@@ -16,5 +16,5 @@ public interface HotelRepository extends JpaRepository<Hotel,Long> {
          SELECT p.priceRange FROM HolidayPackage p where p.id= :id)
          ORDER BY FUNCTION('RANDOM') LIMIT 1
     """)
-    Optional<Hotel> findHotelByPackage(Long id);
+    Optional<Hotel> findHotelByPackage(long id);
 }

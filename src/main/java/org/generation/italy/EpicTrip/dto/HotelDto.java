@@ -24,18 +24,18 @@ public class HotelDto {
     private double longitude;
 
     public HotelDto(Hotel hotel) {
-        this.id=hotel.getId();
-        this.name=hotel.getName();
-        this.country=hotel.getCountry();
-        this.city=hotel.getCity();
-        this.street=hotel.getStreet();
-        this.houseNumber=hotel.getHouseNumber();
-        this.postalCode=hotel.getPostalCode();
-        this.telephoneNumber=hotel.getTelephoneNumber();
-        this.email=hotel.getEmail();
-        this.tripadvisorRating=hotel.getTripadvisorRating();
-        this.latitude=hotel.getLatitude();
-        this.longitude=hotel.getLongitude();
+        this.id = hotel.getId();
+        this.name = hotel.getName();
+        this.country = hotel.getCountry();
+        this.city = hotel.getCity();
+        this.street = hotel.getStreet();
+        this.houseNumber = hotel.getHouseNumber();
+        this.postalCode = hotel.getPostalCode();
+        this.telephoneNumber = hotel.getTelephoneNumber();
+        this.email = hotel.getEmail();
+        this.tripadvisorRating = hotel.getTripadvisorRating();
+        this.latitude = hotel.getLatitude();
+        this.longitude = hotel.getLongitude();
 
     }
 
@@ -43,8 +43,8 @@ public class HotelDto {
     }
 
     public Hotel toHotel(){
-        return new Hotel(this.id,this.name,this.country,this.city,this.street,this.houseNumber,
-                this.postalCode,this.telephoneNumber,this.email,this.tripadvisorRating,this.latitude,this.longitude);
+        return new Hotel(this.id, this.name, this.country, this.city, this.street, this.houseNumber,
+                this.postalCode, this.telephoneNumber, this.email, this.tripadvisorRating, this.latitude, this.longitude);
     }
 
     public long getId() {

@@ -8,8 +8,6 @@ import java.util.Date;
 @Entity
 @Table(name = "survey_answer")
 public class SurveyAnswer {
-    public SurveyAnswer() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,4 +27,34 @@ public class SurveyAnswer {
     @JoinColumn(name = "user_id", nullable = false)
     private AppUser user;
 
+    public SurveyAnswer() {
+    }
+
+    public SurveyAnswer(long id, String answer, LocalDate answerDate, Survey question, AppUser user) {
+        this.id = id;
+        this.answer = answer;
+        this.answerDate = answerDate;
+        this.question = question;
+        this.user = user;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public LocalDate getAnswerDate() {
+        return answerDate;
+    }
+
+    public Survey getQuestion() {
+        return question;
+    }
+
+    public AppUser getUser() {
+        return user;
+    }
 }

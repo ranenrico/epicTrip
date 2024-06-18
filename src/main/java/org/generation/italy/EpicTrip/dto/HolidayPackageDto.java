@@ -38,7 +38,8 @@ public class HolidayPackageDto {
         this.description=hp.getDescription();
         this.maxPeopleCount=hp.getMaxPeopleCount();
         this.imagePath=hp.getImagePath();
-        this.attractionVisits=hp.getAttractionVisits().stream().sorted(Comparator.comparingInt(AttractionVisit::getAttractionOrder)).map(AttractionVisitDto::new).toList();
+        this.attractionVisits=hp.getAttractionVisits().stream()
+                .sorted(Comparator.comparingInt(AttractionVisit::getAttractionOrder)).map(AttractionVisitDto::new).toList();
     }
 
 

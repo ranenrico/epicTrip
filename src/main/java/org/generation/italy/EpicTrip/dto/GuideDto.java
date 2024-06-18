@@ -1,15 +1,12 @@
 package org.generation.italy.EpicTrip.dto;
 
-import jakarta.persistence.*;
 import org.generation.italy.EpicTrip.model.Guide;
-
-import java.time.LocalDate;
 
 public class GuideDto {
 
         private long id;
-        private String firstName;
-        private String lastName;
+        private String firstname;
+        private String lastname;
         private String telephoneNumber;
         private String email;
         private String introduction;
@@ -19,25 +16,25 @@ public class GuideDto {
     }
 
     public GuideDto(Guide guide) {
-       this.id=guide.getId();
-       this.firstName=guide.getFirstName();
-       this.lastName=guide.getLastName();
-       this.telephoneNumber=guide.getTelephoneNumber();
-       this.email=guide.getEmail();
-       this.introduction=guide.getIntroduction();
-       this.workplace=guide.getWorkplace();
+       this.id = guide.getId();
+       this.firstname = guide.getFirstname();
+       this.lastname = guide.getLastname();
+       this.telephoneNumber = guide.getTelephoneNumber();
+       this.email = guide.getEmail();
+       this.introduction = guide.getIntroduction();
+       this.workplace = guide.getWorkplace();
     }
 
     public long getId() {
         return id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
     public String getTelephoneNumber() {
@@ -56,6 +53,9 @@ public class GuideDto {
         return workplace;
     }
     public Guide toGuide(){
-        return new Guide(this.id, this.firstName,this.lastName,this.telephoneNumber,this.email,this.introduction,this.workplace);
+        return new Guide(this.id, this.firstname, this.lastname,
+                this.telephoneNumber, this.email, this.introduction, this.workplace);
     }
+
+
 }

@@ -24,19 +24,19 @@ public class RestaurantDto {
     }
 
     public RestaurantDto(Restaurant r) {
-        this.id=r.getId();
-        this.name=r.getName();
-        this.country=r.getCountry();
-        this.city=r.getCity();
-        this.street=r.getStreet();
-        this.houseNumber=r.getHouseNumber();
-        this.postalCode=r.getPostalCode();
-        this.telephoneNumber=r.getTelephoneNumber();
-        this.email=r.getEmail();
-        this.tripadvisorRating=r.getTripadvisorRating();
-        this.latitude=r.getLatitude();
-        this.longitude=r.getLongitude();
-        this.priceRange=r.getPriceRange();
+        this.id = r.getId();
+        this.name = r.getName();
+        this.country = r.getCountry();
+        this.city = r.getCity();
+        this.street = r.getStreet();
+        this.houseNumber = r.getHouseNumber();
+        this.postalCode = r.getPostalCode();
+        this.telephoneNumber = r.getTelephoneNumber();
+        this.email = r.getEmail();
+        this.tripadvisorRating = r.getTripadvisorRating();
+        this.latitude = r.getLatitude();
+        this.longitude = r.getLongitude();
+        this.priceRange = r.getPriceRange();
     }
 
     public long getId() {

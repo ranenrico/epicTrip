@@ -7,8 +7,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "guide_reservation")
 public class GuideReservation {
-    public GuideReservation() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +29,6 @@ public class GuideReservation {
     @Column(name = "end_performance_date", nullable = false)
     private LocalDate endPerformanceDate;
 
+    public GuideReservation() {
+    }
 }

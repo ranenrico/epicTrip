@@ -7,9 +7,6 @@ import java.util.List;
 @Entity
 @Table(name = "package")
 public class HolidayPackage {
-    public HolidayPackage() {
-    }
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +44,9 @@ public class HolidayPackage {
 
     @OneToMany(mappedBy = "holidayPackage", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<AttractionVisit> attractionVisits = new ArrayList<>();
+
+    public HolidayPackage() {
+    }
 
     public long getId() {
         return id;

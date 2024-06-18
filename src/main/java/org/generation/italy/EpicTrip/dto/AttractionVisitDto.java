@@ -23,13 +23,13 @@ public class AttractionVisitDto {
     }
 
     public AttractionVisitDto(AttractionVisit av) {
-        this.id=av.getId();
-        this.attractionId=av.getAttraction().getId();
-        this.attractionName=av.getAttraction().getName();
-        this.attractionDescription=av.getAttraction().getDescription();
-        this.attractionOrder=av.getAttractionOrder();
-        this.visitDay=av.getVisitDay();
-        this.city=av.getAttraction().getCity();
+        this.id = av.getId();
+        this.attractionId = av.getAttraction().getId();
+        this.attractionName = av.getAttraction().getName();
+        this.attractionDescription = av.getAttraction().getDescription();
+        this.attractionOrder = av.getAttractionOrder();
+        this.visitDay = av.getVisitDay();
+        this.city = av.getAttraction().getCity();
         this.packageId = av.getHolidayPackage().getId();
         this.image = av.getAttraction().getImage();
     }

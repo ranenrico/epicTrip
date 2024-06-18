@@ -15,10 +15,10 @@ public class Guide {
     private long id;
 
     @Column(name = "firstname", nullable = false, length = 32)
-    private String firstName;
+    private String firstname;
 
     @Column(name = "lastname", nullable = false, length = 32)
-    private String lastName;
+    private String lastname;
 
     @Column(name = "birthdate", nullable = false)
     private LocalDate birthdate;
@@ -53,10 +53,10 @@ public class Guide {
     @Column(name = "workplace", nullable = false, length = 32)
     private String workplace;
 
-    public Guide(long id, String firstName, String lastName, String telephoneNumber, String email, String introduction, String workplace) {
+    public Guide(long id, String firstname, String lastname, String telephoneNumber, String email, String introduction, String workplace) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.telephoneNumber = telephoneNumber;
         this.email = email;
         this.introduction = introduction;
@@ -67,12 +67,12 @@ public class Guide {
         return id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
     public String getTelephoneNumber() {
