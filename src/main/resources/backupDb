@@ -5,7 +5,7 @@
 -- Dumped from database version 16.2 (Debian 16.2-1.pgdg120+2)
 -- Dumped by pg_dump version 16.2
 
--- Started on 2024-06-18 13:51:12 UTC
+-- Started on 2024-06-19 21:07:58 UTC
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,7 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 215 (class 1259 OID 74941)
+-- TOC entry 215 (class 1259 OID 37831)
 -- Name: app_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -38,7 +38,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 216 (class 1259 OID 74942)
+-- TOC entry 216 (class 1259 OID 37832)
 -- Name: app_user; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -67,7 +67,7 @@ CREATE TABLE public.app_user (
 ALTER TABLE public.app_user OWNER TO "postgresMaster";
 
 --
--- TOC entry 217 (class 1259 OID 74953)
+-- TOC entry 217 (class 1259 OID 37843)
 -- Name: attraction; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -86,7 +86,7 @@ CREATE TABLE public.attraction (
 ALTER TABLE public.attraction OWNER TO "postgresMaster";
 
 --
--- TOC entry 218 (class 1259 OID 74958)
+-- TOC entry 218 (class 1259 OID 37848)
 -- Name: attraction_visit; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -104,7 +104,7 @@ CREATE TABLE public.attraction_visit (
 ALTER TABLE public.attraction_visit OWNER TO "postgresMaster";
 
 --
--- TOC entry 219 (class 1259 OID 74961)
+-- TOC entry 219 (class 1259 OID 37851)
 -- Name: attraction_visit_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -128,7 +128,7 @@ ALTER SEQUENCE public.attraction_visit_id_seq OWNED BY public.attraction_visit.i
 
 
 --
--- TOC entry 220 (class 1259 OID 74962)
+-- TOC entry 220 (class 1259 OID 37852)
 -- Name: attractions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -152,7 +152,7 @@ ALTER SEQUENCE public.attractions_id_seq OWNED BY public.attraction.id;
 
 
 --
--- TOC entry 221 (class 1259 OID 74963)
+-- TOC entry 221 (class 1259 OID 37853)
 -- Name: comment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -167,7 +167,7 @@ CREATE SEQUENCE public.comment_id_seq
 ALTER SEQUENCE public.comment_id_seq OWNER TO "postgresMaster";
 
 --
--- TOC entry 222 (class 1259 OID 74964)
+-- TOC entry 222 (class 1259 OID 37854)
 -- Name: faq_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -182,7 +182,7 @@ CREATE SEQUENCE public.faq_id_seq
 ALTER SEQUENCE public.faq_id_seq OWNER TO "postgresMaster";
 
 --
--- TOC entry 223 (class 1259 OID 74965)
+-- TOC entry 223 (class 1259 OID 37855)
 -- Name: faq; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -196,7 +196,7 @@ CREATE TABLE public.faq (
 ALTER TABLE public.faq OWNER TO "postgresMaster";
 
 --
--- TOC entry 224 (class 1259 OID 74971)
+-- TOC entry 224 (class 1259 OID 37861)
 -- Name: guide_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -211,7 +211,7 @@ CREATE SEQUENCE public.guide_id_seq
 ALTER SEQUENCE public.guide_id_seq OWNER TO "postgresMaster";
 
 --
--- TOC entry 225 (class 1259 OID 74972)
+-- TOC entry 225 (class 1259 OID 37862)
 -- Name: guide; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -230,6 +230,7 @@ CREATE TABLE public.guide (
     gender character varying,
     introduction character varying(1024) NOT NULL,
     workplace character varying(32) NOT NULL,
+    image_path character varying(32),
     CONSTRAINT check_gender CHECK (((gender)::text = ANY (ARRAY[('Maschio'::character varying)::text, ('Femmina'::character varying)::text, ('Altro'::character varying)::text])))
 );
 
@@ -237,24 +238,24 @@ CREATE TABLE public.guide (
 ALTER TABLE public.guide OWNER TO "postgresMaster";
 
 --
--- TOC entry 226 (class 1259 OID 74979)
+-- TOC entry 226 (class 1259 OID 37869)
 -- Name: guide_reservation; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
 CREATE TABLE public.guide_reservation (
     id bigint NOT NULL,
     guide_id bigint NOT NULL,
-    package_id bigint NOT NULL,
     reservation_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
     start_performance_date date NOT NULL,
-    end_performance_date date NOT NULL
+    end_performance_date date NOT NULL,
+    package_reservation_id bigint NOT NULL
 );
 
 
 ALTER TABLE public.guide_reservation OWNER TO "postgresMaster";
 
 --
--- TOC entry 227 (class 1259 OID 74983)
+-- TOC entry 227 (class 1259 OID 37873)
 -- Name: guide_reservation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -278,7 +279,7 @@ ALTER SEQUENCE public.guide_reservation_id_seq OWNED BY public.guide_reservation
 
 
 --
--- TOC entry 228 (class 1259 OID 74984)
+-- TOC entry 228 (class 1259 OID 37874)
 -- Name: hotel_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -293,7 +294,7 @@ CREATE SEQUENCE public.hotel_id_seq
 ALTER SEQUENCE public.hotel_id_seq OWNER TO "postgresMaster";
 
 --
--- TOC entry 229 (class 1259 OID 74985)
+-- TOC entry 229 (class 1259 OID 37875)
 -- Name: hotel; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -311,7 +312,7 @@ CREATE TABLE public.hotel (
     price_range character varying(8) NOT NULL,
     latitude double precision NOT NULL,
     longitude double precision NOT NULL,
-    commission numeric DEFAULT 0.05 NOT NULL,
+    commission numeric DEFAULT 0.05,
     CONSTRAINT check_price_range CHECK (((price_range)::text = ANY (ARRAY[('$'::character varying)::text, ('$$'::character varying)::text, ('$$$'::character varying)::text]))),
     CONSTRAINT check_tripadvisor_rating CHECK ((tripadvisor_rating = ANY (ARRAY[((1)::numeric)::double precision, (1.5)::double precision, ((2)::numeric)::double precision, (2.5)::double precision, ((3)::numeric)::double precision, (3.5)::double precision, ((4)::numeric)::double precision, (4.5)::double precision, ((5)::numeric)::double precision])))
 );
@@ -320,7 +321,7 @@ CREATE TABLE public.hotel (
 ALTER TABLE public.hotel OWNER TO "postgresMaster";
 
 --
--- TOC entry 230 (class 1259 OID 74994)
+-- TOC entry 230 (class 1259 OID 37884)
 -- Name: hotel_reservation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -335,7 +336,7 @@ CREATE SEQUENCE public.hotel_reservation_id_seq
 ALTER SEQUENCE public.hotel_reservation_id_seq OWNER TO "postgresMaster";
 
 --
--- TOC entry 231 (class 1259 OID 74995)
+-- TOC entry 231 (class 1259 OID 37885)
 -- Name: hotel_reservation; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -356,7 +357,7 @@ CREATE TABLE public.hotel_reservation (
 ALTER TABLE public.hotel_reservation OWNER TO "postgresMaster";
 
 --
--- TOC entry 232 (class 1259 OID 75003)
+-- TOC entry 232 (class 1259 OID 37893)
 -- Name: nearby_restaurant; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -371,7 +372,7 @@ CREATE TABLE public.nearby_restaurant (
 ALTER TABLE public.nearby_restaurant OWNER TO "postgresMaster";
 
 --
--- TOC entry 233 (class 1259 OID 75006)
+-- TOC entry 233 (class 1259 OID 37896)
 -- Name: package; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -396,7 +397,7 @@ CREATE TABLE public.package (
 ALTER TABLE public.package OWNER TO "postgresMaster";
 
 --
--- TOC entry 234 (class 1259 OID 75014)
+-- TOC entry 234 (class 1259 OID 37904)
 -- Name: package_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -420,7 +421,7 @@ ALTER SEQUENCE public.package_id_seq OWNED BY public.package.id;
 
 
 --
--- TOC entry 235 (class 1259 OID 75015)
+-- TOC entry 235 (class 1259 OID 37905)
 -- Name: package_reservation; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -429,7 +430,7 @@ CREATE TABLE public.package_reservation (
     package_id bigint NOT NULL,
     user_id bigint NOT NULL,
     people_count integer NOT NULL,
-    cost numeric NOT NULL,
+    cost numeric DEFAULT 10,
     creation_date date DEFAULT CURRENT_TIMESTAMP NOT NULL,
     start_date date NOT NULL
 );
@@ -438,7 +439,7 @@ CREATE TABLE public.package_reservation (
 ALTER TABLE public.package_reservation OWNER TO "postgresMaster";
 
 --
--- TOC entry 236 (class 1259 OID 75021)
+-- TOC entry 236 (class 1259 OID 37911)
 -- Name: package_reservation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -462,7 +463,7 @@ ALTER SEQUENCE public.package_reservation_id_seq OWNED BY public.package_reserva
 
 
 --
--- TOC entry 237 (class 1259 OID 75022)
+-- TOC entry 237 (class 1259 OID 37912)
 -- Name: reaction_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -477,7 +478,7 @@ CREATE SEQUENCE public.reaction_id_seq
 ALTER SEQUENCE public.reaction_id_seq OWNER TO "postgresMaster";
 
 --
--- TOC entry 238 (class 1259 OID 75023)
+-- TOC entry 238 (class 1259 OID 37913)
 -- Name: reaction; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -491,7 +492,7 @@ CREATE TABLE public.reaction (
 ALTER TABLE public.reaction OWNER TO "postgresMaster";
 
 --
--- TOC entry 239 (class 1259 OID 75027)
+-- TOC entry 239 (class 1259 OID 37917)
 -- Name: restaurant_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -506,7 +507,7 @@ CREATE SEQUENCE public.restaurant_id_seq
 ALTER SEQUENCE public.restaurant_id_seq OWNER TO "postgresMaster";
 
 --
--- TOC entry 240 (class 1259 OID 75028)
+-- TOC entry 240 (class 1259 OID 37918)
 -- Name: restaurant; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -532,7 +533,7 @@ CREATE TABLE public.restaurant (
 ALTER TABLE public.restaurant OWNER TO "postgresMaster";
 
 --
--- TOC entry 241 (class 1259 OID 75034)
+-- TOC entry 241 (class 1259 OID 37924)
 -- Name: restaurant_near_attractions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -556,7 +557,7 @@ ALTER SEQUENCE public.restaurant_near_attractions_id_seq OWNED BY public.nearby_
 
 
 --
--- TOC entry 242 (class 1259 OID 75035)
+-- TOC entry 242 (class 1259 OID 37925)
 -- Name: restaurant_reservation; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -573,7 +574,7 @@ CREATE TABLE public.restaurant_reservation (
 ALTER TABLE public.restaurant_reservation OWNER TO "postgresMaster";
 
 --
--- TOC entry 243 (class 1259 OID 75039)
+-- TOC entry 243 (class 1259 OID 37929)
 -- Name: restaurant_reservation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -597,7 +598,7 @@ ALTER SEQUENCE public.restaurant_reservation_id_seq OWNED BY public.restaurant_r
 
 
 --
--- TOC entry 244 (class 1259 OID 75040)
+-- TOC entry 244 (class 1259 OID 37930)
 -- Name: review_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -612,7 +613,7 @@ CREATE SEQUENCE public.review_id_seq
 ALTER SEQUENCE public.review_id_seq OWNER TO "postgresMaster";
 
 --
--- TOC entry 245 (class 1259 OID 75041)
+-- TOC entry 245 (class 1259 OID 37931)
 -- Name: review; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -628,7 +629,7 @@ CREATE TABLE public.review (
 ALTER TABLE public.review OWNER TO "postgresMaster";
 
 --
--- TOC entry 246 (class 1259 OID 75046)
+-- TOC entry 246 (class 1259 OID 37936)
 -- Name: survey; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -641,7 +642,7 @@ CREATE TABLE public.survey (
 ALTER TABLE public.survey OWNER TO "postgresMaster";
 
 --
--- TOC entry 247 (class 1259 OID 75049)
+-- TOC entry 247 (class 1259 OID 37939)
 -- Name: survey_answer; Type: TABLE; Schema: public; Owner: postgresMaster
 --
 
@@ -657,7 +658,7 @@ CREATE TABLE public.survey_answer (
 ALTER TABLE public.survey_answer OWNER TO "postgresMaster";
 
 --
--- TOC entry 248 (class 1259 OID 75053)
+-- TOC entry 248 (class 1259 OID 37943)
 -- Name: survey_answer_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -681,7 +682,7 @@ ALTER SEQUENCE public.survey_answer_id_seq OWNED BY public.survey_answer.id;
 
 
 --
--- TOC entry 249 (class 1259 OID 75054)
+-- TOC entry 249 (class 1259 OID 37944)
 -- Name: survey_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresMaster
 --
 
@@ -705,7 +706,7 @@ ALTER SEQUENCE public.survey_id_seq OWNED BY public.survey.id;
 
 
 --
--- TOC entry 3285 (class 2604 OID 75055)
+-- TOC entry 3285 (class 2604 OID 37945)
 -- Name: attraction id; Type: DEFAULT; Schema: public; Owner: postgresMaster
 --
 
@@ -713,7 +714,7 @@ ALTER TABLE ONLY public.attraction ALTER COLUMN id SET DEFAULT nextval('public.a
 
 
 --
--- TOC entry 3286 (class 2604 OID 75056)
+-- TOC entry 3286 (class 2604 OID 37946)
 -- Name: attraction_visit id; Type: DEFAULT; Schema: public; Owner: postgresMaster
 --
 
@@ -721,7 +722,7 @@ ALTER TABLE ONLY public.attraction_visit ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
--- TOC entry 3289 (class 2604 OID 75057)
+-- TOC entry 3289 (class 2604 OID 37947)
 -- Name: guide_reservation id; Type: DEFAULT; Schema: public; Owner: postgresMaster
 --
 
@@ -729,7 +730,7 @@ ALTER TABLE ONLY public.guide_reservation ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
--- TOC entry 3295 (class 2604 OID 75058)
+-- TOC entry 3295 (class 2604 OID 37948)
 -- Name: nearby_restaurant id; Type: DEFAULT; Schema: public; Owner: postgresMaster
 --
 
@@ -737,7 +738,7 @@ ALTER TABLE ONLY public.nearby_restaurant ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
--- TOC entry 3296 (class 2604 OID 75059)
+-- TOC entry 3296 (class 2604 OID 37949)
 -- Name: package id; Type: DEFAULT; Schema: public; Owner: postgresMaster
 --
 
@@ -745,7 +746,7 @@ ALTER TABLE ONLY public.package ALTER COLUMN id SET DEFAULT nextval('public.pack
 
 
 --
--- TOC entry 3299 (class 2604 OID 75060)
+-- TOC entry 3299 (class 2604 OID 37950)
 -- Name: package_reservation id; Type: DEFAULT; Schema: public; Owner: postgresMaster
 --
 
@@ -753,7 +754,7 @@ ALTER TABLE ONLY public.package_reservation ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
--- TOC entry 3303 (class 2604 OID 75061)
+-- TOC entry 3304 (class 2604 OID 37951)
 -- Name: restaurant_reservation id; Type: DEFAULT; Schema: public; Owner: postgresMaster
 --
 
@@ -761,7 +762,7 @@ ALTER TABLE ONLY public.restaurant_reservation ALTER COLUMN id SET DEFAULT nextv
 
 
 --
--- TOC entry 3306 (class 2604 OID 75062)
+-- TOC entry 3307 (class 2604 OID 37952)
 -- Name: survey id; Type: DEFAULT; Schema: public; Owner: postgresMaster
 --
 
@@ -769,7 +770,7 @@ ALTER TABLE ONLY public.survey ALTER COLUMN id SET DEFAULT nextval('public.surve
 
 
 --
--- TOC entry 3307 (class 2604 OID 75063)
+-- TOC entry 3308 (class 2604 OID 37953)
 -- Name: survey_answer id; Type: DEFAULT; Schema: public; Owner: postgresMaster
 --
 
@@ -777,7 +778,7 @@ ALTER TABLE ONLY public.survey_answer ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- TOC entry 3538 (class 0 OID 74942)
+-- TOC entry 3538 (class 0 OID 37832)
 -- Dependencies: 216
 -- Data for Name: app_user; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
@@ -787,7 +788,7 @@ INSERT INTO public.app_user VALUES (7, 'Lorenzo', 'Tirotta', '2002-03-22', '3791
 
 
 --
--- TOC entry 3539 (class 0 OID 74953)
+-- TOC entry 3539 (class 0 OID 37843)
 -- Dependencies: 217
 -- Data for Name: attraction; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
@@ -844,7 +845,7 @@ INSERT INTO public.attraction VALUES (48, 'Yoga', 'Praticare yoga a Central Park
 
 
 --
--- TOC entry 3540 (class 0 OID 74958)
+-- TOC entry 3540 (class 0 OID 37848)
 -- Dependencies: 218
 -- Data for Name: attraction_visit; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
@@ -1098,7 +1099,7 @@ INSERT INTO public.attraction_visit VALUES (246, 47, 69, 10, '15:00:00', '19:00:
 
 
 --
--- TOC entry 3545 (class 0 OID 74965)
+-- TOC entry 3545 (class 0 OID 37855)
 -- Dependencies: 223
 -- Data for Name: faq; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
@@ -1122,32 +1123,44 @@ INSERT INTO public.faq VALUES (10, 'Posso richiedere un upgrade dell''alloggio d
 
 
 --
--- TOC entry 3547 (class 0 OID 74972)
+-- TOC entry 3547 (class 0 OID 37862)
 -- Dependencies: 225
 -- Data for Name: guide; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
 
-INSERT INTO public.guide VALUES (1, 'Gianfranco', 'Canovacci', '1993-06-17', '3253693571', 'Italy', 'Florence', 'Via dei Tornabuoni', 12, '50123', 'Gianfri@gmail.com', 'Maschio', 'Ciao! Sono Gianfranco. Sarò la tua guida per questa esperienza fantastica a Lisbona!
-Conosco profondamente questa città e mi ha sempre affascinato. Vivo da 5 anni qui e ho avuto la fortuna di esplorare ogni angolo di questa splendida capitale, immergendomi nella sua storia, cultura e vita quotidiana. Pronti a partire?', 'Lisbon');
+INSERT INTO public.guide VALUES (2, 'Francesca', 'Muccichini', '1990-11-25', '3453697536', 'Italy', 'Milan', 'Via della Moscova', 8, '20121', 'francescamuccichini@gmail.com', 'Femmina', 'Mi chiamo Francesca, e sono qui per accompagnarvi in un viaggio attraverso i quartieri più famosi e le gemme nascoste di New York. Sono profondamente innamorata di New York e sono appassionata nel condividere la sua bellezza e il suo fascino con gli altri. La mia passione per questa città traspare in ogni dettaglio della mia guida. Affidati a me e ti porterò ad ammirare lo skyline più bello del mondo!', 'New York', 'francescaGuida.jpg');
+INSERT INTO public.guide VALUES (3, 'Ciro', 'Avitabile', '1988-06-11', '3241654857', 'Italy', 'Naples', 'Via Toledo', 36, '80132', 'ciruzzo@gmail.com', 'Maschio', 'Ciao a tutti! Mi chiamo Ciro e sono un appasionato di questa città che è il crocevia fra Oriente e Occidente. Sono felice di portarvi grazie ad EpicTrip alla scoperta di Istanbul, una città che considero la mia seconda casa e che ho avuto il privilegio di esplorare a fondo nel corso degli anni. Mangiando un Simit e visitando il Palazzo di Topkapi ci divertiremo ogni minuto. İnşallah!', 'Istanbul', 'ciroGuida.jpg');
 INSERT INTO public.guide VALUES (4, 'Martina', 'Giglio', '1984-09-08', '3784568537', 'Italy', 'Bologna', 'Via Zamboni', 64, '40126', 'mgiglio@yahoo.it', 'Femmina', 'Mi chiamo Martina Giglio, e sono la vostra guida in questo splendido viaggio con EpicTrip, pronta a condividere con voi i segreti e le meraviglie che rendono Lisbona unica.
 La mia avventura con Lisbona è iniziata durante un''indimenticabile esperienza di Erasmus, che mi ha fatto innamorare di questa città. Da allora, ho continuato a tornarci spesso, approfondendo la mia conoscenza e sviluppando una passione inesauribile per tutto ciò che Lisbona ha da offrire.
-Vi porterò a mangiare i Pastel de nata, a visitare il Convento do Carmo e ad affrontare le discese, ma soprattutto le salite di Lisbona. :D', 'Lisbon');
-INSERT INTO public.guide VALUES (2, 'Francesca', 'Muccichini', '1990-11-25', '3453697536', 'Italy', 'Milan', 'Via della Moscova', 8, '20121', 'francescamuccichini@gmail.com', 'Femmina', 'Mi chiamo Francesca, e sono qui per accompagnarvi in un viaggio attraverso i quartieri più famosi e le gemme nascoste di New York. Sono profondamente innamorata di New York e sono appassionata nel condividere la sua bellezza e il suo fascino con gli altri. La mia passione per questa città traspare in ogni dettaglio della mia guida. Affidati a me e ti porterò ad ammirare lo skyline più bello del mondo!', 'New York');
-INSERT INTO public.guide VALUES (3, 'Ciro', 'Avitabile', '1988-06-11', '3241654857', 'Italy', 'Naples', 'Via Toledo', 36, '80132', 'ciruzzo@gmail.com', 'Maschio', 'Ciao a tutti! Mi chiamo Ciro e sono un appasionato di questa città che è il crocevia fra Oriente e Occidente. Sono felice di portarvi grazie ad EpicTrip alla scoperta di Istanbul, una città che considero la mia seconda casa e che ho avuto il privilegio di esplorare a fondo nel corso degli anni. Mangiando un Simit e visitando il Palazzo di Topkapi ci divertiremo ogni minuto. İnşallah!', 'Istanbul');
-INSERT INTO public.guide VALUES (5, 'Simone', 'Mammone', '1990-01-24', '3241109579', 'Italy', 'Turin', 'Via Po', 16, '10123', 'simon90@outlook.it', 'Altro', 'Ciao a tutti! Mi chiamo Simone e sarò la vostra guida EpicTrip per esplorare la fantastica città di New York. Il mio amore per questa città è nato durante una visita anni fa, quando ho passeggiato per la prima volta attraverso Central Park e sono rimasto incantato dalle luci di Times Square. Mi sono perso tra i vicoli del Greenwich Village, scoprendo caffè accoglienti e librerie storiche. Da quel momento, ho amato l''energia e la diversità di New York. Non vedo l''ora di condividere con voi le mie storie e i miei luoghi preferiti, rendendo il vostro viaggio nella Grande Mela indimenticabile!', 'New York');
-INSERT INTO public.guide VALUES (6, 'Emanuele', 'Di Lorenzo', '1995-04-10', '3438524194', 'Italy', 'Bari', 'Corso Vittorio Emanuele II', 128, '70122', 'edilorenzo95@outlook.it', 'Maschio', 'Mi chiamo Emanuele e sono entusiasta di accompagnarvi alla scoperta di una delle città più affascinanti e ricche di storia del mondo: Istanbul. Situata a cavallo tra l''Europa e l''Asia, Istanbul è un crocevia di culture, tradizioni e sapori che saprà incantarvi ad ogni passo. Che siate appassionati di storia, amanti della buona cucina o semplicemente curiosi di scoprire nuovi orizzonti, la mia missione è rendere il vostro soggiorno a Istanbul indimenticabile. Preparatevi a vivere un''esperienza unica, ricca di emozioni e sorprese. Siete pronti a partire? Lasciate che vi mostri Istanbul attraverso i miei occhi.', 'Istanbul');
+Vi porterò a mangiare i Pastel de nata, a visitare il Convento do Carmo e ad affrontare le discese, ma soprattutto le salite di Lisbona. :D', 'Lisbon', 'martinaGuida.jpg');
+INSERT INTO public.guide VALUES (5, 'Simone', 'Mammone', '1990-01-24', '3241109579', 'Italy', 'Turin', 'Via Po', 16, '10123', 'simon90@outlook.it', 'Altro', 'Ciao a tutti! Mi chiamo Simone e sarò la vostra guida EpicTrip per esplorare la fantastica città di New York. Il mio amore per questa città è nato durante una visita anni fa, quando ho passeggiato per la prima volta attraverso Central Park e sono rimasto incantato dalle luci di Times Square. Mi sono perso tra i vicoli del Greenwich Village, scoprendo caffè accoglienti e librerie storiche. Da quel momento, ho amato l''energia e la diversità di New York. Non vedo l''ora di condividere con voi le mie storie e i miei luoghi preferiti, rendendo il vostro viaggio nella Grande Mela indimenticabile!', 'New York', 'simoneGuida.jpg');
+INSERT INTO public.guide VALUES (6, 'Emanuele', 'Di Lorenzo', '1995-04-10', '3438524194', 'Italy', 'Bari', 'Corso Vittorio Emanuele II', 128, '70122', 'edilorenzo95@outlook.it', 'Maschio', 'Mi chiamo Emanuele e sono entusiasta di accompagnarvi alla scoperta di una delle città più affascinanti e ricche di storia del mondo: Istanbul. Situata a cavallo tra l''Europa e l''Asia, Istanbul è un crocevia di culture, tradizioni e sapori che saprà incantarvi ad ogni passo. Che siate appassionati di storia, amanti della buona cucina o semplicemente curiosi di scoprire nuovi orizzonti, la mia missione è rendere il vostro soggiorno a Istanbul indimenticabile. Preparatevi a vivere un''esperienza unica, ricca di emozioni e sorprese. Siete pronti a partire? Lasciate che vi mostri Istanbul attraverso i miei occhi.', 'Istanbul', 'emanueleGuida.jpg');
+INSERT INTO public.guide VALUES (1, 'Gianfranco', 'Canovacci', '1993-06-17', '3253693571', 'Italy', 'Florence', 'Via dei Tornabuoni', 12, '50123', 'gianfri@gmail.com', 'Maschio', 'Ciao! Sono Gianfranco. Sarò la tua guida per questa esperienza fantastica a Lisbona!
+Conosco profondamente questa città e mi ha sempre affascinato. Vivo da 5 anni qui e ho avuto la fortuna di esplorare ogni angolo di questa splendida capitale, immergendomi nella sua storia, cultura e vita quotidiana. Pronti a partire?', 'Lisbon', 'gianfrancoGuida.jpg');
 
 
 --
--- TOC entry 3548 (class 0 OID 74979)
+-- TOC entry 3548 (class 0 OID 37869)
 -- Dependencies: 226
 -- Data for Name: guide_reservation; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
 
+INSERT INTO public.guide_reservation VALUES (8, 4, '2024-06-19', '2024-06-20', '2024-06-21', 8);
+INSERT INTO public.guide_reservation VALUES (9, 4, '2024-06-19', '2024-06-20', '2024-06-21', 9);
+INSERT INTO public.guide_reservation VALUES (10, 4, '2024-06-19', '2024-06-20', '2024-06-21', 10);
+INSERT INTO public.guide_reservation VALUES (11, 4, '2024-06-19', '2024-06-20', '2024-06-21', 11);
+INSERT INTO public.guide_reservation VALUES (12, 4, '2024-06-19', '2024-06-20', '2024-06-21', 12);
+INSERT INTO public.guide_reservation VALUES (13, 4, '2024-06-19', '2024-06-20', '2024-06-21', 13);
+INSERT INTO public.guide_reservation VALUES (14, 5, '2024-06-19', '2024-06-20', '2024-06-23', 14);
+INSERT INTO public.guide_reservation VALUES (15, 2, '2024-06-19', '2024-06-20', '2024-06-23', 15);
+INSERT INTO public.guide_reservation VALUES (16, 2, '2024-06-19', '2024-06-21', '2024-06-24', 16);
+INSERT INTO public.guide_reservation VALUES (17, 5, '2024-06-19', '2024-06-20', '2024-06-23', 17);
+INSERT INTO public.guide_reservation VALUES (18, 2, '2024-06-19', '2024-06-21', '2024-06-24', 18);
+INSERT INTO public.guide_reservation VALUES (19, 2, '2024-06-19', '2024-06-21', '2024-06-24', 19);
 
 
 --
--- TOC entry 3551 (class 0 OID 74985)
+-- TOC entry 3551 (class 0 OID 37875)
 -- Dependencies: 229
 -- Data for Name: hotel; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
@@ -1175,15 +1188,27 @@ INSERT INTO public.hotel VALUES (18, 'Hotel Avenida Palace', 'Portugal', 'Lisbon
 
 
 --
--- TOC entry 3553 (class 0 OID 74995)
+-- TOC entry 3553 (class 0 OID 37885)
 -- Dependencies: 231
 -- Data for Name: hotel_reservation; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
 
+INSERT INTO public.hotel_reservation VALUES (7, 7, '2024-06-19', '2024-06-20 15:30:00', '2024-06-23 09:30:00', 8, 10);
+INSERT INTO public.hotel_reservation VALUES (8, 7, '2024-06-19', '2024-06-20 15:30:00', '2024-06-23 09:30:00', 9, 10);
+INSERT INTO public.hotel_reservation VALUES (9, 7, '2024-06-19', '2024-06-20 15:30:00', '2024-06-23 09:30:00', 10, 10);
+INSERT INTO public.hotel_reservation VALUES (10, 7, '2024-06-19', '2024-06-20 15:30:00', '2024-06-23 09:30:00', 11, 10);
+INSERT INTO public.hotel_reservation VALUES (11, 7, '2024-06-19', '2024-06-20 15:30:00', '2024-06-23 09:30:00', 12, 10);
+INSERT INTO public.hotel_reservation VALUES (12, 7, '2024-06-19', '2024-06-20 15:30:00', '2024-06-23 09:30:00', 13, 10);
+INSERT INTO public.hotel_reservation VALUES (13, 1, '2024-06-19', '2024-06-20 15:30:00', '2024-06-23 09:30:00', 14, 2);
+INSERT INTO public.hotel_reservation VALUES (14, 4, '2024-06-19', '2024-06-20 15:30:00', '2024-06-23 09:30:00', 15, 2);
+INSERT INTO public.hotel_reservation VALUES (15, 2, '2024-06-19', '2024-06-21 15:30:00', '2024-06-24 09:30:00', 16, 2);
+INSERT INTO public.hotel_reservation VALUES (16, 3, '2024-06-19', '2024-06-20 15:30:00', '2024-06-23 09:30:00', 17, 2);
+INSERT INTO public.hotel_reservation VALUES (17, 3, '2024-06-19', '2024-06-21 15:30:00', '2024-06-24 09:30:00', 18, 2);
+INSERT INTO public.hotel_reservation VALUES (18, 4, '2024-06-19', '2024-06-21 15:30:00', '2024-06-24 09:30:00', 19, 3);
 
 
 --
--- TOC entry 3554 (class 0 OID 75003)
+-- TOC entry 3554 (class 0 OID 37893)
 -- Dependencies: 232
 -- Data for Name: nearby_restaurant; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
@@ -1218,7 +1243,7 @@ INSERT INTO public.nearby_restaurant VALUES (27, 27, 34, 0.6);
 
 
 --
--- TOC entry 3555 (class 0 OID 75006)
+-- TOC entry 3555 (class 0 OID 37896)
 -- Dependencies: 233
 -- Data for Name: package; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
@@ -1298,15 +1323,27 @@ INSERT INTO public.package VALUES (51, 3, 'adventure', 'USA', 'New York', '$$$',
 
 
 --
--- TOC entry 3557 (class 0 OID 75015)
+-- TOC entry 3557 (class 0 OID 37905)
 -- Dependencies: 235
 -- Data for Name: package_reservation; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
 
+INSERT INTO public.package_reservation VALUES (8, 7, 6, 10, 1000, '2024-06-19', '2024-06-20');
+INSERT INTO public.package_reservation VALUES (9, 7, 6, 10, 1000, '2024-06-19', '2024-06-20');
+INSERT INTO public.package_reservation VALUES (10, 7, 6, 10, 1000, '2024-06-19', '2024-06-20');
+INSERT INTO public.package_reservation VALUES (11, 7, 6, 10, 1000, '2024-06-19', '2024-06-20');
+INSERT INTO public.package_reservation VALUES (12, 7, 6, 10, 1000, '2024-06-19', '2024-06-20');
+INSERT INTO public.package_reservation VALUES (13, 7, 6, 10, 1000, '2024-06-19', '2024-06-20');
+INSERT INTO public.package_reservation VALUES (14, 61, 6, 2, 1000, '2024-06-19', '2024-06-20');
+INSERT INTO public.package_reservation VALUES (15, 50, 6, 2, 1000, '2024-06-19', '2024-06-20');
+INSERT INTO public.package_reservation VALUES (16, 67, 6, 2, 1000, '2024-06-19', '2024-06-21');
+INSERT INTO public.package_reservation VALUES (17, 62, 6, 2, 1000, '2024-06-19', '2024-06-20');
+INSERT INTO public.package_reservation VALUES (18, 62, 6, 2, 1000, '2024-06-19', '2024-06-21');
+INSERT INTO public.package_reservation VALUES (19, 56, 6, 3, 1000, '2024-06-19', '2024-06-21');
 
 
 --
--- TOC entry 3560 (class 0 OID 75023)
+-- TOC entry 3560 (class 0 OID 37913)
 -- Dependencies: 238
 -- Data for Name: reaction; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
@@ -1314,7 +1351,7 @@ INSERT INTO public.package VALUES (51, 3, 'adventure', 'USA', 'New York', '$$$',
 
 
 --
--- TOC entry 3562 (class 0 OID 75028)
+-- TOC entry 3562 (class 0 OID 37918)
 -- Dependencies: 240
 -- Data for Name: restaurant; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
@@ -1349,15 +1386,42 @@ INSERT INTO public.restaurant VALUES (13, '$1.50 Fresh Pizza', 'USA', 'New York'
 
 
 --
--- TOC entry 3564 (class 0 OID 75035)
+-- TOC entry 3564 (class 0 OID 37925)
 -- Dependencies: 242
 -- Data for Name: restaurant_reservation; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
 
+INSERT INTO public.restaurant_reservation VALUES (1, 19, '2024-06-19', '2024-06-21 13:30:00', 10, 11);
+INSERT INTO public.restaurant_reservation VALUES (2, 22, '2024-06-19', '2024-06-22 13:30:00', 10, 11);
+INSERT INTO public.restaurant_reservation VALUES (3, 25, '2024-06-19', '2024-06-20 13:30:00', 10, 11);
+INSERT INTO public.restaurant_reservation VALUES (4, 19, '2024-06-19', '2024-06-21 13:30:00', 10, 12);
+INSERT INTO public.restaurant_reservation VALUES (5, 22, '2024-06-19', '2024-06-22 13:30:00', 10, 12);
+INSERT INTO public.restaurant_reservation VALUES (6, 25, '2024-06-19', '2024-06-20 13:30:00', 10, 12);
+INSERT INTO public.restaurant_reservation VALUES (7, 19, '2024-06-19', '2024-06-21 13:30:00', 10, 13);
+INSERT INTO public.restaurant_reservation VALUES (8, 22, '2024-06-19', '2024-06-22 13:30:00', 10, 13);
+INSERT INTO public.restaurant_reservation VALUES (9, 25, '2024-06-19', '2024-06-20 13:30:00', 10, 13);
+INSERT INTO public.restaurant_reservation VALUES (10, 10, '2024-06-19', '2024-06-20 02:00:00', 2, 14);
+INSERT INTO public.restaurant_reservation VALUES (11, 13, '2024-06-19', '2024-06-21 00:00:00', 2, 14);
+INSERT INTO public.restaurant_reservation VALUES (12, 16, '2024-06-19', '2024-06-23 02:00:00', 2, 14);
+INSERT INTO public.restaurant_reservation VALUES (13, 11, '2024-06-19', '2024-06-20 02:00:00', 2, 15);
+INSERT INTO public.restaurant_reservation VALUES (14, 14, '2024-06-19', '2024-06-21 00:00:00', 2, 15);
+INSERT INTO public.restaurant_reservation VALUES (15, 17, '2024-06-19', '2024-06-23 02:00:00', 2, 15);
+INSERT INTO public.restaurant_reservation VALUES (16, 10, '2024-06-19', '2024-06-21 02:00:00', 2, 16);
+INSERT INTO public.restaurant_reservation VALUES (17, 13, '2024-06-19', '2024-06-22 00:00:00', 2, 16);
+INSERT INTO public.restaurant_reservation VALUES (18, 16, '2024-06-19', '2024-06-24 02:00:00', 2, 16);
+INSERT INTO public.restaurant_reservation VALUES (19, 11, '2024-06-19', '2024-06-20 02:00:00', 2, 17);
+INSERT INTO public.restaurant_reservation VALUES (20, 14, '2024-06-19', '2024-06-21 00:00:00', 2, 17);
+INSERT INTO public.restaurant_reservation VALUES (21, 17, '2024-06-19', '2024-06-23 02:00:00', 2, 17);
+INSERT INTO public.restaurant_reservation VALUES (22, 11, '2024-06-19', '2024-06-21 02:00:00', 2, 18);
+INSERT INTO public.restaurant_reservation VALUES (23, 14, '2024-06-19', '2024-06-22 00:00:00', 2, 18);
+INSERT INTO public.restaurant_reservation VALUES (24, 17, '2024-06-19', '2024-06-24 02:00:00', 2, 18);
+INSERT INTO public.restaurant_reservation VALUES (25, 11, '2024-06-19', '2024-06-21 02:00:00', 3, 19);
+INSERT INTO public.restaurant_reservation VALUES (26, 14, '2024-06-19', '2024-06-22 00:00:00', 3, 19);
+INSERT INTO public.restaurant_reservation VALUES (27, 17, '2024-06-19', '2024-06-24 02:00:00', 3, 19);
 
 
 --
--- TOC entry 3567 (class 0 OID 75041)
+-- TOC entry 3567 (class 0 OID 37931)
 -- Dependencies: 245
 -- Data for Name: review; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
@@ -1365,7 +1429,7 @@ INSERT INTO public.restaurant VALUES (13, '$1.50 Fresh Pizza', 'USA', 'New York'
 
 
 --
--- TOC entry 3568 (class 0 OID 75046)
+-- TOC entry 3568 (class 0 OID 37936)
 -- Dependencies: 246
 -- Data for Name: survey; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
@@ -1379,11 +1443,239 @@ INSERT INTO public.survey VALUES (6, 'Quanto vuoi spendere?');
 
 
 --
--- TOC entry 3569 (class 0 OID 75049)
+-- TOC entry 3569 (class 0 OID 37939)
 -- Dependencies: 247
 -- Data for Name: survey_answer; Type: TABLE DATA; Schema: public; Owner: postgresMaster
 --
 
+INSERT INTO public.survey_answer VALUES (3, 'Lisbon', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (4, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (5, '2024-07-03', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (6, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (7, 'city_tour', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (8, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (9, 'Lisbon', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (10, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (11, '2024-07-03', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (12, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (13, 'city_tour', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (14, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (15, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (16, '5', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (17, '2024-06-20', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (18, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (19, 'mix', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (20, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (21, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (22, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (23, '2024-06-20', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (24, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (25, 'mix', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (26, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (27, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (28, '3', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (29, '2024-06-20', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (30, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (31, 'mix', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (32, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (33, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (34, '4', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (35, '2024-06-20', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (36, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (37, 'mix', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (38, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (39, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (40, '1', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (41, '2024-06-27', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (42, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (43, 'mix', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (44, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (45, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (46, '3', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (47, '2024-06-20', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (48, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (49, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (50, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (51, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (52, '5', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (53, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (54, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (55, 'mix', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (56, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (57, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (58, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (59, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (60, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (61, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (62, '$$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (63, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (64, '5', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (65, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (66, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (67, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (68, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (69, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (70, '4', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (71, '2024-06-20', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (72, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (73, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (74, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (75, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (76, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (77, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (78, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (79, 'mix', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (80, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (81, 'Lisbon', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (82, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (83, '2024-07-03', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (84, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (85, 'city_tour', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (86, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (87, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (88, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (89, '2024-06-20', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (90, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (91, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (92, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (93, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (94, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (95, '2024-06-27', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (96, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (97, 'mix', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (98, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (99, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (100, '5', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (101, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (102, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (103, 'city_tour', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (104, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (105, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (106, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (107, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (108, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (109, 'city_tour', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (110, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (111, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (112, '3', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (113, '2024-10-03', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (114, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (115, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (116, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (117, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (118, '3', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (119, '2024-06-20', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (120, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (121, 'mix', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (122, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (123, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (124, '3', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (125, '2024-06-27', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (126, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (127, 'mix', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (128, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (129, 'Istanbul', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (130, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (131, '2024-07-04', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (132, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (133, 'city_tour', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (134, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (135, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (136, '3', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (137, '2024-06-28', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (138, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (139, 'city_tour', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (140, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (141, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (142, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (143, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (144, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (145, 'mix', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (146, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (147, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (148, '1', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (149, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (150, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (151, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (152, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (153, 'Istanbul', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (154, '3', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (155, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (156, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (157, 'city_tour', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (158, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (159, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (160, '3', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (161, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (162, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (163, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (164, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (165, 'Istanbul', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (166, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (167, '2024-06-22', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (168, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (169, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (170, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (171, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (172, '4', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (173, '2024-06-28', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (174, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (175, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (176, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (177, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (178, '4', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (179, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (180, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (181, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (182, '$$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (183, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (184, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (185, '2024-06-20', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (186, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (187, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (188, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (189, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (190, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (191, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (192, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (193, 'mix', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (194, '$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (195, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (196, '3', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (197, '2024-06-20', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (198, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (199, 'city_tour', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (200, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (201, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (202, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (203, '2024-06-20', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (204, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (205, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (206, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (207, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (208, '3', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (209, '2024-06-27', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (210, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (211, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (212, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (213, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (214, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (215, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (216, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (217, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (218, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (219, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (220, '2', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (221, '2024-06-27', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (222, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (223, 'relax', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (224, '$$', '2024-06-19', 6, 6);
+INSERT INTO public.survey_answer VALUES (225, 'New York', '2024-06-19', 1, 6);
+INSERT INTO public.survey_answer VALUES (226, '3', '2024-06-19', 2, 6);
+INSERT INTO public.survey_answer VALUES (227, '2024-06-21', '2024-06-19', 3, 6);
+INSERT INTO public.survey_answer VALUES (228, '3', '2024-06-19', 4, 6);
+INSERT INTO public.survey_answer VALUES (229, 'city_tour', '2024-06-19', 5, 6);
+INSERT INTO public.survey_answer VALUES (230, '$$', '2024-06-19', 6, 6);
 
 
 --
@@ -1446,7 +1738,7 @@ SELECT pg_catalog.setval('public.guide_id_seq', 6, true);
 -- Name: guide_reservation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
 --
 
-SELECT pg_catalog.setval('public.guide_reservation_id_seq', 1, true);
+SELECT pg_catalog.setval('public.guide_reservation_id_seq', 19, true);
 
 
 --
@@ -1464,7 +1756,7 @@ SELECT pg_catalog.setval('public.hotel_id_seq', 18, true);
 -- Name: hotel_reservation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
 --
 
-SELECT pg_catalog.setval('public.hotel_reservation_id_seq', 1, true);
+SELECT pg_catalog.setval('public.hotel_reservation_id_seq', 18, true);
 
 
 --
@@ -1482,7 +1774,7 @@ SELECT pg_catalog.setval('public.package_id_seq', 3, true);
 -- Name: package_reservation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
 --
 
-SELECT pg_catalog.setval('public.package_reservation_id_seq', 1, true);
+SELECT pg_catalog.setval('public.package_reservation_id_seq', 19, true);
 
 
 --
@@ -1518,7 +1810,7 @@ SELECT pg_catalog.setval('public.restaurant_near_attractions_id_seq', 27, true);
 -- Name: restaurant_reservation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
 --
 
-SELECT pg_catalog.setval('public.restaurant_reservation_id_seq', 1, false);
+SELECT pg_catalog.setval('public.restaurant_reservation_id_seq', 27, true);
 
 
 --
@@ -1536,7 +1828,7 @@ SELECT pg_catalog.setval('public.review_id_seq', 5, true);
 -- Name: survey_answer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgresMaster
 --
 
-SELECT pg_catalog.setval('public.survey_answer_id_seq', 1, true);
+SELECT pg_catalog.setval('public.survey_answer_id_seq', 230, true);
 
 
 --
@@ -1549,7 +1841,7 @@ SELECT pg_catalog.setval('public.survey_id_seq', 6, true);
 
 
 --
--- TOC entry 3344 (class 2606 OID 75065)
+-- TOC entry 3342 (class 2606 OID 37955)
 -- Name: app_user app_user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1558,7 +1850,7 @@ ALTER TABLE ONLY public.app_user
 
 
 --
--- TOC entry 3348 (class 2606 OID 75067)
+-- TOC entry 3348 (class 2606 OID 37957)
 -- Name: attraction_visit attraction_visit_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1567,7 +1859,7 @@ ALTER TABLE ONLY public.attraction_visit
 
 
 --
--- TOC entry 3346 (class 2606 OID 75069)
+-- TOC entry 3346 (class 2606 OID 37959)
 -- Name: attraction attractions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1576,7 +1868,7 @@ ALTER TABLE ONLY public.attraction
 
 
 --
--- TOC entry 3316 (class 2606 OID 75070)
+-- TOC entry 3317 (class 2606 OID 37960)
 -- Name: guide check_if_adult; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1585,7 +1877,7 @@ ALTER TABLE public.guide
 
 
 --
--- TOC entry 3317 (class 2606 OID 75071)
+-- TOC entry 3318 (class 2606 OID 37961)
 -- Name: guide check_if_at_least_eight_numbers; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1594,7 +1886,7 @@ ALTER TABLE public.guide
 
 
 --
--- TOC entry 3322 (class 2606 OID 75072)
+-- TOC entry 3322 (class 2606 OID 37962)
 -- Name: hotel check_if_at_least_eight_numbers; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1603,7 +1895,7 @@ ALTER TABLE public.hotel
 
 
 --
--- TOC entry 3325 (class 2606 OID 75073)
+-- TOC entry 3325 (class 2606 OID 37963)
 -- Name: hotel_reservation check_if_check_in_is_valid; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1612,7 +1904,7 @@ ALTER TABLE public.hotel_reservation
 
 
 --
--- TOC entry 3339 (class 2606 OID 75074)
+-- TOC entry 3338 (class 2606 OID 37964)
 -- Name: restaurant_reservation check_if_reservation_date_is_valid; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1621,7 +1913,7 @@ ALTER TABLE public.restaurant_reservation
 
 
 --
--- TOC entry 3319 (class 2606 OID 75075)
+-- TOC entry 3320 (class 2606 OID 37965)
 -- Name: guide_reservation check_if_reservation_date_is_valid; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1630,7 +1922,7 @@ ALTER TABLE public.guide_reservation
 
 
 --
--- TOC entry 3320 (class 2606 OID 75076)
+-- TOC entry 3321 (class 2606 OID 37966)
 -- Name: guide_reservation check_if_startdate_is_before_end; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1639,7 +1931,7 @@ ALTER TABLE public.guide_reservation
 
 
 --
--- TOC entry 3314 (class 2606 OID 75077)
+-- TOC entry 3315 (class 2606 OID 37967)
 -- Name: attraction_visit check_if_starttime_is_before_endtime; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1648,7 +1940,7 @@ ALTER TABLE public.attraction_visit
 
 
 --
--- TOC entry 3318 (class 2606 OID 75078)
+-- TOC entry 3319 (class 2606 OID 37968)
 -- Name: guide check_if_valid_workplace; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1657,7 +1949,7 @@ ALTER TABLE public.guide
 
 
 --
--- TOC entry 3335 (class 2606 OID 75079)
+-- TOC entry 3334 (class 2606 OID 37969)
 -- Name: package_reservation check_start_date_after_creation_date; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1666,25 +1958,16 @@ ALTER TABLE public.package_reservation
 
 
 --
--- TOC entry 3321 (class 2606 OID 75080)
--- Name: guide_reservation date_difference_check; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
+-- TOC entry 3344 (class 2606 OID 46028)
+-- Name: app_user email_already_exists; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
-ALTER TABLE public.guide_reservation
-    ADD CONSTRAINT date_difference_check CHECK ((((end_performance_date - start_performance_date) = 2) OR ((end_performance_date - start_performance_date) = 4))) NOT VALID;
-
-
---
--- TOC entry 3329 (class 2606 OID 75081)
--- Name: hotel_reservation date_difference_check; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
---
-
-ALTER TABLE public.hotel_reservation
-    ADD CONSTRAINT date_difference_check CHECK (((((check_out)::date - (check_in)::date) = 2) OR (((check_out)::date - (check_in)::date) = 4))) NOT VALID;
+ALTER TABLE ONLY public.app_user
+    ADD CONSTRAINT email_already_exists UNIQUE (email);
 
 
 --
--- TOC entry 3352 (class 2606 OID 75083)
+-- TOC entry 3352 (class 2606 OID 37973)
 -- Name: faq faq_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1693,7 +1976,7 @@ ALTER TABLE ONLY public.faq
 
 
 --
--- TOC entry 3354 (class 2606 OID 75085)
+-- TOC entry 3354 (class 2606 OID 37975)
 -- Name: guide guide_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1702,7 +1985,7 @@ ALTER TABLE ONLY public.guide
 
 
 --
--- TOC entry 3356 (class 2606 OID 75087)
+-- TOC entry 3356 (class 2606 OID 37977)
 -- Name: guide_reservation guide_reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1711,7 +1994,7 @@ ALTER TABLE ONLY public.guide_reservation
 
 
 --
--- TOC entry 3358 (class 2606 OID 75089)
+-- TOC entry 3358 (class 2606 OID 37979)
 -- Name: hotel hotel_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1720,7 +2003,7 @@ ALTER TABLE ONLY public.hotel
 
 
 --
--- TOC entry 3360 (class 2606 OID 75091)
+-- TOC entry 3360 (class 2606 OID 37981)
 -- Name: hotel_reservation hotel_reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1729,7 +2012,7 @@ ALTER TABLE ONLY public.hotel_reservation
 
 
 --
--- TOC entry 3334 (class 2606 OID 75092)
+-- TOC entry 3333 (class 2606 OID 37982)
 -- Name: package max_ten_people; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1738,7 +2021,7 @@ ALTER TABLE public.package
 
 
 --
--- TOC entry 3336 (class 2606 OID 75093)
+-- TOC entry 3335 (class 2606 OID 37983)
 -- Name: package_reservation max_ten_people; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1747,7 +2030,7 @@ ALTER TABLE public.package_reservation
 
 
 --
--- TOC entry 3330 (class 2606 OID 75094)
+-- TOC entry 3329 (class 2606 OID 37984)
 -- Name: hotel_reservation max_ten_people; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1756,7 +2039,7 @@ ALTER TABLE public.hotel_reservation
 
 
 --
--- TOC entry 3340 (class 2606 OID 75095)
+-- TOC entry 3339 (class 2606 OID 37985)
 -- Name: restaurant_reservation max_ten_people; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1765,7 +2048,7 @@ ALTER TABLE public.restaurant_reservation
 
 
 --
--- TOC entry 3364 (class 2606 OID 75097)
+-- TOC entry 3364 (class 2606 OID 37987)
 -- Name: package package_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1774,7 +2057,7 @@ ALTER TABLE ONLY public.package
 
 
 --
--- TOC entry 3366 (class 2606 OID 75099)
+-- TOC entry 3366 (class 2606 OID 37989)
 -- Name: package_reservation package_reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1783,7 +2066,7 @@ ALTER TABLE ONLY public.package_reservation
 
 
 --
--- TOC entry 3368 (class 2606 OID 75101)
+-- TOC entry 3368 (class 2606 OID 37991)
 -- Name: reaction reaction_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1792,7 +2075,7 @@ ALTER TABLE ONLY public.reaction
 
 
 --
--- TOC entry 3362 (class 2606 OID 75103)
+-- TOC entry 3362 (class 2606 OID 37993)
 -- Name: nearby_restaurant restaurant_near_attractions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1801,7 +2084,7 @@ ALTER TABLE ONLY public.nearby_restaurant
 
 
 --
--- TOC entry 3370 (class 2606 OID 75105)
+-- TOC entry 3370 (class 2606 OID 37995)
 -- Name: restaurant restaurant_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1810,7 +2093,7 @@ ALTER TABLE ONLY public.restaurant
 
 
 --
--- TOC entry 3372 (class 2606 OID 75107)
+-- TOC entry 3372 (class 2606 OID 37997)
 -- Name: restaurant_reservation restaurant_reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1819,7 +2102,7 @@ ALTER TABLE ONLY public.restaurant_reservation
 
 
 --
--- TOC entry 3374 (class 2606 OID 75109)
+-- TOC entry 3374 (class 2606 OID 37999)
 -- Name: review review_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1828,7 +2111,7 @@ ALTER TABLE ONLY public.review
 
 
 --
--- TOC entry 3378 (class 2606 OID 75111)
+-- TOC entry 3378 (class 2606 OID 38001)
 -- Name: survey_answer survey_answer_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1837,7 +2120,7 @@ ALTER TABLE ONLY public.survey_answer
 
 
 --
--- TOC entry 3376 (class 2606 OID 75113)
+-- TOC entry 3376 (class 2606 OID 38003)
 -- Name: survey survey_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1846,7 +2129,7 @@ ALTER TABLE ONLY public.survey
 
 
 --
--- TOC entry 3350 (class 2606 OID 75115)
+-- TOC entry 3350 (class 2606 OID 38005)
 -- Name: attraction_visit unique_package_attraction_order; Type: CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1855,16 +2138,7 @@ ALTER TABLE ONLY public.attraction_visit
 
 
 --
--- TOC entry 3342 (class 2606 OID 75116)
--- Name: survey_answer valid_answer; Type: CHECK CONSTRAINT; Schema: public; Owner: postgresMaster
---
-
-ALTER TABLE public.survey_answer
-    ADD CONSTRAINT valid_answer CHECK ((((question_id = 1) AND ((answer)::text = ANY (ARRAY[('Lisbona'::character varying)::text, ('New York'::character varying)::text, ('Istanbul'::character varying)::text]))) OR ((question_id = 2) AND ((answer)::text ~ '^\d+$'::text) AND ((answer)::integer >= 1) AND ((answer)::integer <= 10)))) NOT VALID;
-
-
---
--- TOC entry 3379 (class 2606 OID 75117)
+-- TOC entry 3379 (class 2606 OID 38007)
 -- Name: attraction_visit fk_attraction_visit_attraction; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1873,7 +2147,7 @@ ALTER TABLE ONLY public.attraction_visit
 
 
 --
--- TOC entry 3380 (class 2606 OID 75122)
+-- TOC entry 3380 (class 2606 OID 38012)
 -- Name: attraction_visit fk_attraction_visit_package; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1882,7 +2156,7 @@ ALTER TABLE ONLY public.attraction_visit
 
 
 --
--- TOC entry 3381 (class 2606 OID 75127)
+-- TOC entry 3381 (class 2606 OID 38017)
 -- Name: guide_reservation fk_guide_reservation_guide; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1891,16 +2165,16 @@ ALTER TABLE ONLY public.guide_reservation
 
 
 --
--- TOC entry 3382 (class 2606 OID 75132)
--- Name: guide_reservation fk_guide_reservation_package; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
+-- TOC entry 3382 (class 2606 OID 46022)
+-- Name: guide_reservation fk_guide_reservation_package_reservation; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
 ALTER TABLE ONLY public.guide_reservation
-    ADD CONSTRAINT fk_guide_reservation_package FOREIGN KEY (package_id) REFERENCES public.package(id) NOT VALID;
+    ADD CONSTRAINT fk_guide_reservation_package_reservation FOREIGN KEY (package_reservation_id) REFERENCES public.package_reservation(id) NOT VALID;
 
 
 --
--- TOC entry 3383 (class 2606 OID 75137)
+-- TOC entry 3383 (class 2606 OID 38027)
 -- Name: hotel_reservation fk_hotel_reservation_hotel; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1909,7 +2183,7 @@ ALTER TABLE ONLY public.hotel_reservation
 
 
 --
--- TOC entry 3384 (class 2606 OID 75142)
+-- TOC entry 3384 (class 2606 OID 38032)
 -- Name: hotel_reservation fk_hotel_reservation_package_reservation; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1918,7 +2192,7 @@ ALTER TABLE ONLY public.hotel_reservation
 
 
 --
--- TOC entry 3385 (class 2606 OID 75147)
+-- TOC entry 3385 (class 2606 OID 38037)
 -- Name: nearby_restaurant fk_nearby_restaurant_attraction; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1927,7 +2201,7 @@ ALTER TABLE ONLY public.nearby_restaurant
 
 
 --
--- TOC entry 3386 (class 2606 OID 75152)
+-- TOC entry 3386 (class 2606 OID 38042)
 -- Name: nearby_restaurant fk_nearby_restaurant_restaurant; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1936,7 +2210,7 @@ ALTER TABLE ONLY public.nearby_restaurant
 
 
 --
--- TOC entry 3387 (class 2606 OID 75157)
+-- TOC entry 3387 (class 2606 OID 38047)
 -- Name: reaction fk_reaction_app_user; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1945,7 +2219,7 @@ ALTER TABLE ONLY public.reaction
 
 
 --
--- TOC entry 3388 (class 2606 OID 75162)
+-- TOC entry 3388 (class 2606 OID 38052)
 -- Name: reaction fk_reaction_review; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1954,7 +2228,7 @@ ALTER TABLE ONLY public.reaction
 
 
 --
--- TOC entry 3389 (class 2606 OID 75167)
+-- TOC entry 3389 (class 2606 OID 38057)
 -- Name: restaurant_reservation fk_restaurant_reservation_package_reservation; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1963,7 +2237,7 @@ ALTER TABLE ONLY public.restaurant_reservation
 
 
 --
--- TOC entry 3390 (class 2606 OID 75172)
+-- TOC entry 3390 (class 2606 OID 38062)
 -- Name: restaurant_reservation fk_restaurant_reservation_restaurant; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1972,7 +2246,7 @@ ALTER TABLE ONLY public.restaurant_reservation
 
 
 --
--- TOC entry 3391 (class 2606 OID 75177)
+-- TOC entry 3391 (class 2606 OID 38067)
 -- Name: review fk_review_app_user; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1981,7 +2255,7 @@ ALTER TABLE ONLY public.review
 
 
 --
--- TOC entry 3392 (class 2606 OID 75182)
+-- TOC entry 3392 (class 2606 OID 38072)
 -- Name: survey_answer fk_survey_answer_app_user; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1990,7 +2264,7 @@ ALTER TABLE ONLY public.survey_answer
 
 
 --
--- TOC entry 3393 (class 2606 OID 75187)
+-- TOC entry 3393 (class 2606 OID 38077)
 -- Name: survey_answer fk_survey_answer_survey; Type: FK CONSTRAINT; Schema: public; Owner: postgresMaster
 --
 
@@ -1998,7 +2272,7 @@ ALTER TABLE ONLY public.survey_answer
     ADD CONSTRAINT fk_survey_answer_survey FOREIGN KEY (question_id) REFERENCES public.survey(id);
 
 
--- Completed on 2024-06-18 13:51:13 UTC
+-- Completed on 2024-06-19 21:07:58 UTC
 
 --
 -- PostgreSQL database dump complete
