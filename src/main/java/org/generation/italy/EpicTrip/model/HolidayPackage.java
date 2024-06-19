@@ -48,6 +48,10 @@ public class HolidayPackage {
     public HolidayPackage() {
     }
 
+    public HolidayPackage(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

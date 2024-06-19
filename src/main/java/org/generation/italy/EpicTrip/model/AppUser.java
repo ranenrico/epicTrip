@@ -25,6 +25,11 @@ public class AppUser {
         this(id, firstname, lastname, birthdate, telephoneNumber, country, city, street, houseNumber,  postalCode, email, gender);
         this.password = password;
     }
+
+    public AppUser(long id) {
+        this.id = id;
+    }
+
     public AppUser() {
     }
 
