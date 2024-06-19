@@ -69,6 +69,6 @@ public class SurveyAnswerDto {
     }
 
     public SurveyAnswer toSurveyAnswer(AppUser user, Survey survey){
-        return new SurveyAnswer(this.id, this.answer, DateUtils.parse(this.answerDate), survey, user);
+        return new SurveyAnswer(this.id, this.answer,this.answerDate == null ? LocalDate.now() : DateUtils.parse(this.answerDate), survey, user);
     }
 }

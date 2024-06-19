@@ -35,4 +35,24 @@ public class HotelReservation {
     @Column(name = "people_count", nullable = false)
     private int peopleCount;
 
+    public HotelReservation(Hotel hotel, LocalDate reservationDate, LocalDateTime checkIn, LocalDateTime checkOut, HolidayPackageReservation holidayPackageReservation, int peopleCount) {
+        this.hotel = hotel;
+        this.reservationDate = reservationDate;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
+        this.holidayPackageReservation = holidayPackageReservation;
+        this.peopleCount = peopleCount;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public LocalDateTime getCheckIn() {
+        return checkIn;
+    }
+
+    public LocalDateTime getCheckOut() {
+        return checkOut;
+    }
 }

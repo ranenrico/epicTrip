@@ -9,11 +9,13 @@ import org.generation.italy.EpicTrip.model.repository.abstraction.AppUserReposit
 import org.generation.italy.EpicTrip.model.repository.abstraction.SurveyAnswerRepository;
 import org.generation.italy.EpicTrip.model.repository.abstraction.SurveyRepository;
 import org.generation.italy.EpicTrip.model.service.abstraction.SurveyAnswerService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Service
 public class JpaSurveyAnswerService implements SurveyAnswerService {
     private SurveyAnswerRepository surveyAnswerRepository;
     private SurveyRepository surveyRepository;

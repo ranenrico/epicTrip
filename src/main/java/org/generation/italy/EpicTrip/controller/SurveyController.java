@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,19 +26,20 @@ public class SurveyController {
     private SurveyAnswerService surveyAnswerService;
     private UserService userService;
 
-    public SurveyController(ClientCommunicationService clientCommunicationService,UserService userService) {
+    public SurveyController(ClientCommunicationService clientCommunicationService, UserService userService, SurveyAnswerService surveyAnswerService) {
         this.clientCommunicationService = clientCommunicationService;
-        this.userService=userService;
+        this.userService = userService;
+        this.surveyAnswerService = surveyAnswerService;
     }
 
     @GetMapping
-    public ResponseEntity<List<QuestionDto>> getQuestions(){
-        List<Survey> questions= clientCommunicationService.getOrderedQuestions();
+    public ResponseEntity<List<QuestionDto>> getQuestions() {
+        List<Survey> questions = clientCommunicationService.getOrderedQuestions();
         return ResponseEntity.ok().body(questions.stream().map(QuestionDto::new).toList());
     }
 
 
-//    //TO-DO
+    //    //TO-DO
 //    @PostMapping
 //    public ResponseEntity<?> saveSurveyAnswers(@RequestBody List<SurveyAnswerDto> answersDto){
 //        try {
@@ -49,30 +51,39 @@ public class SurveyController {
 //        } catch (EntityNotFoundException e) {
 //            return ResponseEntity.notFound().build();
 //        }
-        public ResponseEntity<?> saveSurveyAnswers(@RequestBody List<SurveyAnswerDto> answersDto) {
-            try {
-                AppUser user = userService.getById(answersDto.get(0).getUserId());
-                List<SurveyAnswer> answers = answersDto.stream().map(ad -> {
-                    Survey survey = null;
-                    try {
-                        survey = surveyAnswerService.getQuestionById(ad.getQuestionId());
-                    } catch (EntityNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                    return ad.toSurveyAnswer(user, survey);
-                }).collect(Collectors.toList());
-
-                List<SurveyAnswer> savedAnswers = surveyAnswerService.saveSurveyAnswers(answers);
-
-                List<SurveyAnswerDto> responseDtos = savedAnswers.stream().map(SurveyAnswerDto::new).collect(Collectors.toList());
-
-                return ResponseEntity.ok().body(responseDtos);
-            } catch (EntityNotFoundException e) {
-                return ResponseEntity.notFound().build();
+    @PostMapping
+    public ResponseEntity<?> saveSurveyAnswers(@RequestBody List<SurveyAnswerDto> answersDto,
+                                               @AuthenticationPrincipal UserPrincipal principal) {
+        try {
+            AppUser user = principal.getUser();
+            List<SurveyAnswer> answers = new ArrayList<>();
+            for(var dto : answersDto){
+                Survey survey = surveyAnswerService.getQuestionById(dto.getQuestionId());
+                SurveyAnswer answer = dto.toSurveyAnswer(user, survey);
+                answers.add(answer);
             }
+
+            List<SurveyAnswer> savedAnswers = surveyAnswerService.saveSurveyAnswers(answers);
+
+            List<SurveyAnswerDto> responseDtos = savedAnswers.stream().map(SurveyAnswerDto::new).collect(Collectors.toList());
+
+            return ResponseEntity.ok().body(responseDtos);
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Hai inviato risposte per domande con id non esistenti.");
         }
-
-
     }
+//            List<SurveyAnswer> answers = answersDto.stream().map(ad -> {
+//                try {
+//                    Survey survey = surveyAnswerService.getQuestionById(ad.getQuestionId());
+//                    return ad.toSurveyAnswer(user, survey);
+//                } catch (EntityNotFoundException e) {
+//                    System.out.println(e.getMessage());
+//                    e.printStackTrace();
+//                    throw new RuntimeException(e);
+//                }
+//            }).collect(Collectors.toList());
+
+}
 
 

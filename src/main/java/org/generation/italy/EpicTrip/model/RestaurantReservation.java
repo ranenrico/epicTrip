@@ -12,8 +12,6 @@ import java.util.Date;
 @Entity
 @Table(name = "restaurant_reservation")
 public class RestaurantReservation {
-    public RestaurantReservation() {
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +34,22 @@ public class RestaurantReservation {
     @JoinColumn(name = "package_reservation_id", nullable = false)
     private HolidayPackageReservation holidayPackageReservation;
 
+    public RestaurantReservation() {
+    }
+
+    public RestaurantReservation(Restaurant restaurant, LocalDate reservationDate, LocalDateTime checkIn, int peopleCount, HolidayPackageReservation holidayPackageReservation) {
+        this.restaurant = restaurant;
+        this.reservationDate = reservationDate;
+        this.checkIn = checkIn;
+        this.peopleCount = peopleCount;
+        this.holidayPackageReservation = holidayPackageReservation;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public LocalDateTime getCheckIn() {
+        return checkIn;
+    }
 }

@@ -63,6 +63,10 @@ public class Guide {
         this.workplace = workplace;
     }
 
+    public Guide(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

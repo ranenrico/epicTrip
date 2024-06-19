@@ -17,8 +17,8 @@ public class GuideReservation {
     private Guide guide;
 
     @ManyToOne
-    @JoinColumn(name = "package_id", nullable = false)
-    private HolidayPackage holidayPackage;
+    @JoinColumn(name = "package_reservation_id", nullable = false)
+    private HolidayPackageReservation holidayPackageReservation;
 
     @Column(name = "reservation_date", nullable = false)
     private LocalDate reservationDate;
@@ -29,6 +29,26 @@ public class GuideReservation {
     @Column(name = "end_performance_date", nullable = false)
     private LocalDate endPerformanceDate;
 
+    public GuideReservation(Guide guide, HolidayPackageReservation holidayPackageReservation, LocalDate reservationDate, LocalDate startPerformanceDate, LocalDate endPerformanceDate) {
+        this.guide = guide;
+        this.holidayPackageReservation = holidayPackageReservation;
+        this.reservationDate = reservationDate;
+        this.startPerformanceDate = startPerformanceDate;
+        this.endPerformanceDate = endPerformanceDate;
+    }
+
     public GuideReservation() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public LocalDate getStartPerformanceDate() {
+        return startPerformanceDate;
+    }
+
+    public LocalDate getEndPerformanceDate() {
+        return endPerformanceDate;
     }
 }
