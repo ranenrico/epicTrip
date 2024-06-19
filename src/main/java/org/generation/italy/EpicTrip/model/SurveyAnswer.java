@@ -38,6 +38,12 @@ public class SurveyAnswer {
         this.user = user;
     }
 
+    public SurveyAnswer(String answer, Survey question, AppUser user) {
+        this.answer = answer;
+        this.question = question;
+        this.user = user;
+    }
+
     public long getId() {
         return id;
     }
