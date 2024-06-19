@@ -18,5 +18,17 @@ public class FAQ {
     @Column(name = "answer", length = 512)
     private String answer;
 
+    public long getId() {
+        return id;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
 }
 
