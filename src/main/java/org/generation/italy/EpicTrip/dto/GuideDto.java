@@ -11,6 +11,7 @@ public class GuideDto {
         private String email;
         private String introduction;
         private String workplace;
+        private String image;
 
     public GuideDto() {
     }
@@ -23,6 +24,7 @@ public class GuideDto {
        this.email = guide.getEmail();
        this.introduction = guide.getIntroduction();
        this.workplace = guide.getWorkplace();
+       this.image = guide.getImage();
     }
 
     public long getId() {
@@ -54,8 +56,10 @@ public class GuideDto {
     }
     public Guide toGuide(){
         return new Guide(this.id, this.firstname, this.lastname,
-                this.telephoneNumber, this.email, this.introduction, this.workplace);
+                this.telephoneNumber, this.email, this.introduction, this.workplace, this.image);
     }
 
-
+    public String getImage() {
+        return image;
+    }
 }

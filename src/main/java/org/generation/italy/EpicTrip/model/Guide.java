@@ -53,7 +53,10 @@ public class Guide {
     @Column(name = "workplace", nullable = false, length = 32)
     private String workplace;
 
-    public Guide(long id, String firstname, String lastname, String telephoneNumber, String email, String introduction, String workplace) {
+    @Column(name = "image_path")
+    private String image;
+
+    public Guide(long id, String firstname, String lastname, String telephoneNumber, String email, String introduction, String workplace, String image) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -61,6 +64,7 @@ public class Guide {
         this.email = email;
         this.introduction = introduction;
         this.workplace = workplace;
+        this.image = image;
     }
 
     public Guide(long id) {
@@ -93,5 +97,9 @@ public class Guide {
 
     public String getWorkplace() {
         return workplace;
+    }
+
+    public String getImage() {
+        return image;
     }
 }
