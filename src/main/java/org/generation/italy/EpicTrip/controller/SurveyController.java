@@ -62,11 +62,8 @@ public class SurveyController {
                 SurveyAnswer answer = dto.toSurveyAnswer(user, survey);
                 answers.add(answer);
             }
-
             List<SurveyAnswer> savedAnswers = surveyAnswerService.saveSurveyAnswers(answers);
-
             List<SurveyAnswerDto> responseDtos = savedAnswers.stream().map(SurveyAnswerDto::new).collect(Collectors.toList());
-
             return ResponseEntity.ok().body(responseDtos);
         } catch (EntityNotFoundException e) {
             e.printStackTrace();
